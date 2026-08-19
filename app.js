@@ -83,8 +83,8 @@ function renderHand(player,elId,clickable){
     const n=hands[player].length;
     const mid=(n-1)/2;
     const off=i-mid;
-    const angle=off*(n>=11?3.2:n>=8?3.6:4.0);
-    const drop=Math.pow(Math.abs(off),1.38)*1.0;
+    const angle=off*(n>=11?2.15:n>=8?2.5:3.0);
+    const drop=Math.pow(Math.abs(off),1.34)*0.62;
     d.style.transform=`translateY(${drop}px) rotate(${angle}deg)`;
     d.style.zIndex=String(i+1);
     if(clickable)d.onclick=()=>humanCard(player,i);
@@ -92,13 +92,19 @@ function renderHand(player,elId,clickable){
   });
 }
 function renderHands(){
-  renderHand('S','handS', phase==='play' && current==='S');
+  const southIsDummy = dummyShown && dummy==='S';
+  const southClickable = phase==='play' && current==='S' && !southIsDummy;
+  renderHand('S','handS', southClickable);
   $('southHcp').textContent=`(${hcp(hands.S)} H)`;
-  if(dummyShown){
+  $('southLabel').innerHTML=(southIsDummy?'Mort — Sud ':'Votre main — Sud ')+`<span id="southHcp">(${hcp(hands.S)} H)</span>`;
+
+  if(dummyShown && dummy!=='S'){
     $('dummyWrap').classList.remove('hidden');
     $('dummyLabel').textContent=`Mort — ${NAME[dummy]} (${hcp(hands[dummy])} H)`;
-    renderHand(dummy,'dummyHand',phase==='play' && current===dummy && side(declarer)==='NS');
-  }else $('dummyWrap').classList.add('hidden');
+    renderHand(dummy,'dummyHand', phase==='play' && declarer==='S' && current===dummy);
+  }else{
+    $('dummyWrap').classList.add('hidden');
+  }
 }
 function renderTrick(){
   ['N','E','S','W'].forEach(p=>{
@@ -240,6 +246,8 @@ function playCard(p,i){
 }
 function humanCard(p,i){
   if(phase!=='play'||current!==p)return;
+  const canHumanPlay = (p==='S' && dummy!=='S') || (declarer==='S' && p===dummy);
+  if(!canHumanPlay)return;
   if(!legalCards(p).includes(i)){ $('status').textContent='Vous devez fournir à la couleur.'; return; }
   playCard(p,i);
 }
@@ -249,10 +257,13 @@ function botCard(){
 }
 function advancePlay(){
   renderHands();
-  const humanControls = current==='S' || (current===dummy && side(declarer)==='NS');
+  const humanControls = (current==='S' && dummy!=='S') || (declarer==='S' && current===dummy);
   if(humanControls){
     $('status').textContent=current==='S'?'À vous, Sud.':`À vous de jouer depuis le mort (${NAME[dummy]}).`;
-  }else setTimeout(botCard,420);
+  }else{
+    $('status').textContent=(dummy==='S' && current==='S')?'Sud est le mort : Nord joue cette carte.':`${NAME[current]} joue…`;
+    setTimeout(botCard,420);
+  }
 }
 function endPlay(){
   phase='done'; const target=6+contract.level; const won=side(declarer)==='NS'?tricksNS:tricksEW; const diff=won-target;
@@ -271,7 +282,7 @@ function hintBid(){
 }
 function hintCard(){
   if(phase!=='play')return;
-  const human=current==='S'||(current===dummy&&side(declarer)==='NS'); if(!human){$('status').textContent='Attendez le robot.';return}
+  const human=(current==='S'&&dummy!=='S')||(declarer==='S'&&current===dummy); if(!human){$('status').textContent='Attendez le robot.';return}
   const i=cheapWinningIndex(current); $('status').textContent=`Conseil : ${fmtCard(hands[current][i])}.`;
 }
 function autoFinish(){

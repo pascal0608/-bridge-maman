@@ -89,3 +89,40 @@ footer{display:none!important}
   .hand{height:76px}.card{height:59px;font-size:15px;flex-basis:50px;width:50px;max-width:50px;margin-left:-28px}
   .controls button{min-height:25px;font-size:11px}.status{min-height:23px;max-height:29px}
 }
+
+
+/* === V3.3 — EVENTAIL PLUS LISIBLE === */
+.hand{
+  height:82px;
+  padding-top:4px;
+  overflow:visible;
+}
+.card{
+  flex:0 0 42px;
+  width:42px;
+  max-width:42px;
+  height:61px;
+  margin-left:-14px;
+  font-size:15px;
+  line-height:16px;
+  border-radius:6px;
+}
+.card:first-child{margin-left:0}
+#dummyWrap .hand{height:65px}
+#dummyWrap .card{
+  flex-basis:38px;
+  width:38px;
+  max-width:38px;
+  margin-left:-13px;
+  height:52px;
+  font-size:12px;
+  line-height:13px;
+}
+@media(max-width:390px){
+  .card{
+    flex-basis:40px;
+    width:40px;
+    max-width:40px;
+    margin-left:-14px;
+  }
+}
