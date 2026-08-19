@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#0d5c2f">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="styles.css">
+  <title>Bridge Expert SEF</title>
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div>
+        <div class="brand">Bridge Expert SEF</div>
+        <div class="sub" id="dealInfo">Donne 1</div>
+      </div>
+      <button class="iconBtn" id="newDealBtn" aria-label="Nouvelle donne">↻</button>
+    </header>
+
+    <section class="table">
+      <div class="seat north" id="seatN">Nord<br><span>Robot</span></div>
+      <div class="seat west" id="seatW">Ouest<br><span>Robot</span></div>
+      <div class="center">
+        <div id="auctionPanel">
+          <div class="panelTitle">Enchères</div>
+          <table class="auction">
+            <thead><tr><th>O</th><th>N</th><th>E</th><th>S</th></tr></thead>
+            <tbody id="auctionBody"></tbody>
+          </table>
+          <div class="contractLine" id="contractLine">À vous de jouer quand Sud est au tour.</div>
+        </div>
+
+        <div id="playPanel" class="hidden">
+          <div class="panelTitle">Pli en cours</div>
+          <div class="trickGrid">
+            <div class="trickPos n" id="trickN">—</div>
+            <div class="trickPos w" id="trickW">—</div>
+            <div class="trickPos e" id="trickE">—</div>
+            <div class="trickPos s" id="trickS">—</div>
+          </div>
+          <div class="scoreline" id="scoreLine"></div>
+        </div>
+      </div>
+      <div class="seat east" id="seatE">Est<br><span>Robot</span></div>
+      <div class="seat south active" id="seatS">Sud<br><span>Vous</span></div>
+    </section>
+
+    <section class="handWrap">
+      <div class="handLabel">Votre main — Sud <span id="southHcp"></span></div>
+      <div class="hand" id="handS"></div>
+    </section>
+
+    <section class="handWrap hidden" id="dummyWrap">
+      <div class="handLabel" id="dummyLabel">Mort</div>
+      <div class="hand" id="dummyHand"></div>
+    </section>
+
+    <section class="controls" id="bidControls">
+      <div class="bidLevels" id="bidLevels"></div>
+      <div class="strainRow" id="strainRow"></div>
+      <div class="actionRow">
+        <button id="passBtn" class="pass">Passe</button>
+        <button id="doubleBtn">X</button>
+        <button id="redoubleBtn">XX</button>
+        <button id="hintBidBtn" class="hint">Conseil</button>
+      </div>
+    </section>
+
+    <section class="controls hidden" id="playControls">
+      <div class="actionRow">
+        <button id="hintCardBtn" class="hint">Conseil carte</button>
+        <button id="analysisBtn">Analyse</button>
+        <button id="claimBtn">Finir automatiquement</button>
+      </div>
+    </section>
+
+    <section class="status" id="status">Distribution en cours…</section>
+
+    <footer>
+      <button id="installBtn">Ajouter à l’écran d’accueil</button>
+      <div class="fineprint">SEF / Majeure 5e — robot d’entraînement avancé, pas un moteur de compétition.</div>
+    </footer>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

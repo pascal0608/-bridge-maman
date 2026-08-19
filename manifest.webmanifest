@@ -1,0 +1,9 @@
+{
+  "name": "Bridge Expert SEF",
+  "short_name": "Bridge SEF",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#083f21",
+  "theme_color": "#0d5c2f",
+  "icons": []
+}
