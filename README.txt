@@ -27,3 +27,6 @@ IMPORTANT
 Le moteur de jeu inclus est un moteur d'entraînement "avancé" basé sur des heuristiques
 (SEF simplifié pour les enchères, fourniture/prise économique/atout pour le jeu de la carte).
 Il ne remplace pas un moteur de niveau championnat/expert humain.
+
+
+V2 : affichage iPhone compact plein écran, 13 cartes visibles simultanément.
