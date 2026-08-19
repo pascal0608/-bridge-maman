@@ -24,7 +24,7 @@ function sortHand(h){
   while(more){
     more=false;
     for(const s of suitOrder){
-      if(buckets[s].length){result.push(buckets[s].shift());more=true;}
+      if(buckets[s].length){ result.push(buckets[s].shift()); more=true; }
     }
   }
   return result;
@@ -83,15 +83,11 @@ function renderHand(player,elId,clickable){
     const n=hands[player].length;
     const mid=(n-1)/2;
     const off=i-mid;
-    const angle=off*(n>=11?3.35:n>=8?3.8:4.3);
-    const drop=Math.pow(Math.abs(off),1.38)*1.05;
+    const angle=off*(n>=11?3.2:n>=8?3.6:4.0);
+    const drop=Math.pow(Math.abs(off),1.38)*1.0;
     d.style.transform=`translateY(${drop}px) rotate(${angle}deg)`;
     d.style.zIndex=String(i+1);
-    if(clickable){
-      d.onclick=()=>humanCard(player,i);
-      d.ontouchstart=()=>{d.style.filter='brightness(.93)';};
-      d.ontouchend=()=>{d.style.filter='';};
-    }
+    if(clickable)d.onclick=()=>humanCard(player,i);
     el.appendChild(d);
   });
 }

@@ -29,4 +29,4 @@ Le moteur de jeu inclus est un moteur d'entraînement "avancé" basé sur des he
 Il ne remplace pas un moteur de niveau championnat/expert humain.
 
 
-V3.1 : fichiers CSS/JS versionnés pour forcer le rafraîchissement du cache + éventail réaliste + alternance noir/rouge.
+V3.2 CLEAN : fichiers standards index.html / app.js / styles.css, cache v32, éventail réaliste et alternance noir/rouge.
