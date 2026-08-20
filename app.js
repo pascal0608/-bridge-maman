@@ -1,4 +1,4 @@
-/* Bridge Maman V8 — maquette validée + toutes modifications */
+/* Bridge Maman V9 — maquette validée + toutes modifications */
 
 const SUITS=['♥','♠','♦','♣','SA'];
 const BID_ORDER=['♣','♦','♥','♠','SA'];

@@ -1,11 +1,14 @@
-BRIDGE MAMAN V8
+BRIDGE MAMAN V9
 ================
-Version basée sur la V7 corrigée.
-- correction du démarrage du jeu ;
-- affichage téléphone réduit ;
-- grand panneau Bridge Maman supprimé ;
-- ordre ♥ Cœur → ♠ Pique → ♦ Carreau → ♣ Trèfle ;
-- rejouer la dernière donne ;
-- carte qui se soulève sous le doigt ;
+Reconstruction de l'interface pour corriger les problèmes de la V8.
+
+- plus d'image de fond contenant de faux boutons/cartes ;
+- toute l'interface visible est maintenant réellement interactive ;
+- affichage entier automatiquement réduit à la taille du téléphone ;
+- enchères visibles dans l'ordre ♥ Cœur, ♠ Pique, ♦ Carreau, ♣ Trèfle, SA ;
+- cartes de Sud classées ♥ ♠ ♦ ♣ ;
+- carte qui monte sous le doigt ;
+- rejouer exactement la dernière donne ;
 - Sud choisit sa carte lorsqu'il est le mort ;
-- cache V8 pour forcer la mise à jour du site.
+- contrat, score et historique dynamiques ;
+- cache V9.

@@ -1,203 +1,54 @@
 
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-:root{--red:#a51f18;--gold:#d49a45;--cream:#f6ead3;--dark:#0c0b0a;--wood:#4b2115}
-html,body{margin:0;background:#070605;color:#fff;font-family:Georgia,"Times New Roman",serif}
-button{font:inherit;font-weight:700}
-.portraitNotice{display:none}
-.game{position:relative;width:100vw;height:100dvh;min-width:900px;min-height:600px;overflow:hidden;background:#120b07}
-.referenceBg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.72) saturate(.9)}
-.logoPanel{position:absolute;z-index:4;left:.8%;top:1%;width:29%;padding:.7% 1.1%;border:1px solid #ad2a1f;border-radius:8px;background:#080706e8;box-shadow:0 4px 14px #000}
-.brand{font-size:clamp(28px,4vw,62px);font-weight:700;font-style:italic;color:#f1c875;line-height:.95}.brand span{color:#df2a20;font-size:.6em}
-.tagline{margin-top:.4%;text-align:right;color:#e24734;font-style:italic;font-size:clamp(12px,1.4vw,22px)}
-.dealInfo{margin-top:.4%;font-size:clamp(10px,1vw,15px);color:#f4e3c5}
-.namePlate{position:absolute;z-index:5;min-width:105px;text-align:center;background:#090909e9;border:2px solid #b0732c;border-radius:7px;overflow:hidden;box-shadow:0 3px 10px #000}
-.namePlate b{display:block;background:var(--red);padding:4px;font-size:clamp(12px,1.3vw,20px)}.namePlate span,.namePlate small{display:block;padding:4px;border-top:1px solid #a86e2f;font-size:clamp(10px,1.1vw,16px)}
-.namePlate.active{box-shadow:0 0 0 3px #f1c54a,0 3px 10px #000}.northPlate{left:34%;top:1.5%;width:11%}.westPlate{left:.7%;top:18%;width:10%}.eastPlate{right:15%;top:18%;width:10%}.southPlate{left:42.5%;bottom:11%;width:15%}
-.auctionChooser{position:absolute;z-index:7;left:.7%;bottom:15.5%;width:25%;background:#29100bdc;border:2px solid #a85c29;border-radius:8px;overflow:hidden;box-shadow:0 4px 12px #000}
-.auctionChooser h2,.infoBox h2{margin:0;text-align:center;background:#9d211a;color:#fff;padding:5px;font-size:clamp(14px,1.5vw,22px)}
-.auctionHeader{display:grid;grid-template-columns:repeat(5,1fr);background:#eee1c4;color:#111}.auctionHeader span{text-align:center;padding:5px;border-right:1px solid #bbaa8b;font-weight:bold}.auctionHeader .red{color:#c82027}
-.auctionButtons{display:grid;grid-template-columns:repeat(5,1fr);background:#f6ecd6}.auctionButtons button{min-height:31px;border:1px solid #c4b495;background:#f6ecd6;color:#111}.auctionButtons button span{margin-left:2px}.auctionButtons .red{color:#ca222a}
-.auctionActions{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;padding:5px}.auctionActions button{min-height:38px;color:white;border:1px solid #c28242;border-radius:5px}.blue{background:#24529a}.redBtn{background:#bb281e}.green{background:#277242}.auctionHelp{text-align:center;padding:4px;color:#ffe6bc;font-size:12px}.engineControls{display:none}
-.rightRail{position:absolute;z-index:7;right:.8%;top:1.4%;width:14.5%;min-width:165px}.infoBox{background:#f8edd6;color:#111;border:2px solid #a66b29;border-radius:8px;overflow:hidden;margin-bottom:12px;box-shadow:0 4px 11px #000}
-.infoBox h3{margin:0;background:#a6221b;color:#fff;text-align:center;padding:4px;font-size:clamp(12px,1.1vw,17px)}#contractPretty,#leadPretty{text-align:center;padding:7px}#contractPretty strong{display:block;font-size:clamp(22px,2.1vw,34px)}#contractPretty span{display:block;margin-top:2px}
-.scoreGrid{display:grid;grid-template-columns:1fr 1fr;text-align:center}.scoreGrid>*{padding:5px;border:1px solid #c8b99d}.historyBox{min-height:220px}.historyHead{display:grid;grid-template-columns:1fr 1fr;font-weight:bold}.historyHead span{padding:5px;text-align:center;border-bottom:1px solid #c8b99d}.histRow{display:grid;grid-template-columns:1fr 1fr}.histRow>*{padding:4px 6px;border-bottom:1px solid #ded3bf;font-size:12px}.sideBtn{width:100%;margin:5px 0;min-height:42px;border:1px solid #c1823d;border-radius:7px;background:#141312e8;color:#fff}
-.tableCore{position:absolute;z-index:5;left:27%;right:18%;top:22%;bottom:22%}.hiddenEngine{display:none}.playedCard{position:absolute;width:66px;height:88px;background:#fffdf5;color:#111;border:1px solid #aaa;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:25px;font-weight:bold;box-shadow:0 4px 10px #000}.playedCard.n{left:45%;top:8%}.playedCard.w{left:27%;top:42%}.playedCard.e{right:27%;top:42%}.playedCard.s{left:45%;bottom:8%}.compass{position:absolute;left:47%;top:43%;color:#f0c157;text-align:center;font-weight:bold}.compass span{font-size:12px}
-.handWrap{position:absolute;z-index:8}.southHand{left:25%;right:18%;bottom:9.2%;height:220px}.handLabel{display:none}.hand{height:100%;display:flex;justify-content:center;align-items:flex-end;padding-bottom:3px;overflow:visible;touch-action:none;user-select:none;-webkit-user-select:none}
-.card{flex:0 0 78px;width:78px;height:154px;margin-left:-37px;background:#fffdf6;color:#111;border:1px solid #9e9688;border-radius:9px;display:flex;align-items:center;justify-content:flex-start;flex-direction:column;padding-top:8px;font-size:28px;font-weight:bold;line-height:1.05;box-shadow:0 5px 10px #0009;transform-origin:50% 100%;transform:translateY(var(--card-drop,0px)) rotate(var(--card-angle,0deg));transition:transform .1s,box-shadow .1s,filter .1s}.card:first-child{margin-left:0}.card.red{color:#c51f27}.card.illegal{opacity:.3;pointer-events:none}.card.preview{transform:translateY(calc(var(--card-drop,0px) - 46px)) rotate(var(--card-angle,0deg)) scale(1.07);z-index:1000!important;filter:brightness(1.05);box-shadow:0 16px 22px #000}
-.dummyHand{left:31%;right:27%;top:16%;height:135px}.dummyHand .handLabel{display:block;background:#130b07cc;color:#fff;padding:3px 6px;border-radius:5px;width:max-content}.dummyHand .card{flex-basis:50px;width:50px;height:92px;margin-left:-25px;font-size:18px}.dummyHand .hand{align-items:flex-start}
-.playControls{position:absolute;z-index:9;left:1%;bottom:10.5%;display:flex;gap:5px}.playControls button{padding:8px 10px;border:1px solid #bf7834;border-radius:6px;background:#451d13;color:#fff}
-.bottomBar{position:absolute;z-index:10;left:0;right:0;bottom:0;height:9.5%;display:grid;grid-template-columns:1fr 1.2fr 1.6fr 1fr;gap:2%;align-items:center;padding:.7% 4%;background:#0a0909ef;border-top:2px solid #9d241c}.bottomBar button{height:70%;border:1px solid #c57b35;border-radius:8px;background:linear-gradient(#332018,#100e0c);color:#fff}.bottomBar button:nth-child(2),.bottomBar button:nth-child(3){background:linear-gradient(#8b321f,#38130e)}.newDeal{position:absolute;right:1%;top:-58%;height:42%!important;width:12%}
-.status{position:absolute;z-index:11;left:33%;right:28%;bottom:9.7%;background:#120c08d9;border:1px solid #a6622f;border-radius:6px;padding:5px 8px;text-align:center;font-size:12px}
-dialog{border:2px solid #a66b29;border-radius:12px;background:#f5ead2;color:#23150f;max-width:420px}dialog::backdrop{background:#0009}dialog button{padding:8px 18px}
-.hidden{display:none!important}.engineSeat{display:none}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#080604;color:#fff;font-family:Georgia,"Times New Roman",serif}
+button{font:inherit;font-weight:800}
+#viewport{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);overflow:hidden}
+.game{position:relative;width:1280px;height:720px;transform-origin:top left;background:#2b160d;overflow:hidden}
+.wood{position:absolute;inset:0;background:
+radial-gradient(circle at 50% 20%,#6c3f26 0,#3b2115 55%,#1b0d08 100%)}
+.table{position:absolute;left:260px;top:115px;width:790px;height:500px;border-radius:30px;
+background:radial-gradient(circle,#176a3a 0,#0b4f2b 70%,#073b21 100%);
+border:18px solid #6a351d;box-shadow:0 0 0 5px #28130c,inset 0 0 35px #0008}
+.dealBadge{position:absolute;z-index:8;left:18px;top:16px;padding:8px 12px;border-radius:8px;background:#0c0907dd;border:1px solid #a36a2f;color:#f6e6c8;font:700 14px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.player{position:absolute;z-index:3}.avatar{font-size:74px;filter:drop-shadow(0 5px 4px #0009)}
+.northVisual{left:594px;top:20px}.westVisual{left:145px;top:245px}.eastVisual{right:150px;top:240px}
+.namePlate{position:absolute;z-index:9;width:118px;text-align:center;background:#0b0a09e8;border:2px solid #a66b2c;border-radius:8px;overflow:hidden;box-shadow:0 4px 10px #000}
+.namePlate b{display:block;padding:5px;background:#9e211b;font-size:17px}.namePlate span,.namePlate small{display:block;padding:4px;border-top:1px solid #9f6a31;font-size:13px}
+.namePlate.active{box-shadow:0 0 0 4px #f0c84b,0 4px 10px #000}
+.northPlate{left:584px;top:20px}.westPlate{left:45px;top:155px}.eastPlate{right:48px;top:155px}.southPlate{left:586px;bottom:72px}
+.engineSeat{display:none}
 
+.auctionPanel{position:absolute;z-index:10;left:16px;bottom:95px;width:255px;background:#2b120ddd;border:2px solid #a6632f;border-radius:9px;overflow:hidden;box-shadow:0 4px 12px #000}
+.auctionPanel h2,.box h2{margin:0;padding:6px;background:#9f211b;text-align:center;font-size:18px}
+.prettyHeader,.prettyBids{display:grid;grid-template-columns:repeat(5,1fr);background:#f7ecd6;color:#111}
+.prettyHeader span{padding:6px 0;text-align:center;border-right:1px solid #c7b897;font-size:18px;font-weight:bold}
+.prettyBids button{height:31px;border:1px solid #c7b897;background:#f7ecd6;color:#111;font-size:15px}
+.redSuit{color:#c82028}
+.engineBid{display:none}
+.auctionActions{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;padding:6px}
+.auctionActions button{height:36px;border-radius:6px;border:1px solid #c27b3d;color:white}.xx{background:#28559a}.x{background:#bb281e}.pass{background:#287342}
 
-/* V6 — interface légèrement réduite, panneau titre supprimé */
-.logoPanel{display:none!important}
-.namePlate{transform:scale(.90);transform-origin:center}
-.auctionChooser{width:23%;bottom:16.5%;transform:scale(.94);transform-origin:left bottom}
-.rightRail{width:13.5%;min-width:150px;transform:scale(.94);transform-origin:right top}
-.southHand{left:27%;right:20%;bottom:10%;height:195px}
-.card{flex-basis:70px;width:70px;height:140px;margin-left:-33px;font-size:25px}
-.card:first-child{margin-left:0}
-.bottomBar{height:8.7%;padding:.55% 5%}
-.status{bottom:8.9%}
-.southPlate{bottom:10%}
+.rightRail{position:absolute;z-index:10;right:16px;top:16px;width:205px}
+.box{margin-bottom:12px;background:#f7ecd5;color:#111;border:2px solid #a66b2e;border-radius:9px;overflow:hidden;box-shadow:0 4px 12px #000}
+.box h3{margin:0;padding:5px;background:#a3221b;color:#fff;text-align:center;font-size:15px}
+.contractPretty,.leadPretty{text-align:center;padding:7px}.contractPretty strong{display:block;font-size:27px}.contractPretty span{display:block;font-size:15px}
+.score{display:grid;grid-template-columns:1fr 1fr;text-align:center}.score>*{padding:6px;border:1px solid #c9baa0}
+.historyBox{height:230px}.histHead{display:grid;grid-template-columns:1fr 1fr;font-weight:bold}.histHead span{padding:6px;border-bottom:1px solid #c8baa0;text-align:center}.histRow{display:grid;grid-template-columns:1fr 1fr}.histRow>*{padding:4px 7px;border-bottom:1px solid #ded2bd;font-size:12px}
 
+.tableCore{position:absolute;z-index:7;left:330px;top:170px;width:610px;height:325px}
+.engineAuction{display:none}
+.played{position:absolute;width:68px;height:92px;background:#fffdf6;color:#111;border-radius:8px;border:1px solid #aaa;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:bold;box-shadow:0 5px 10px #0008}
+.played.n{left:270px;top:0}.played.w{left:170px;top:120px}.played.e{right:170px;top:120px}.played.s{left:270px;bottom:0}
+.compass{position:absolute;left:285px;top:122px;text-align:center;color:#f0c14f;font-size:20px;font-weight:bold}.compass span{font-size:12px}
 
-/* === V7 MOBILE FIX === */
-.game{
-  min-width:0!important;
-  min-height:0!important;
-  width:100vw!important;
-  height:100dvh!important;
-}
-.logoPanel{display:none!important}
-.referenceBg{object-fit:cover!important}
-@media (max-width: 900px){
-  html,body{overflow:hidden}
-  .game{
-    transform:none!important;
-    width:100vw!important;
-    height:100dvh!important;
-    min-width:0!important;
-    min-height:0!important;
-  }
-  .referenceBg{
-    object-fit:cover!important;
-    object-position:center top!important;
-  }
-  .namePlate{
-    min-width:0!important;
-    width:auto!important;
-    font-size:8px!important;
-    border-width:1px!important;
-  }
-  .namePlate b{font-size:10px!important;padding:2px 4px!important}
-  .namePlate span,.namePlate small{font-size:8px!important;padding:2px 4px!important}
-  .northPlate{left:42%!important;top:1%!important}
-  .westPlate{left:1%!important;top:20%!important}
-  .eastPlate{right:14%!important;top:20%!important}
-  .southPlate{left:42%!important;bottom:12%!important;width:16%!important}
+.handWrap{position:absolute;z-index:12}.southHand{left:300px;bottom:72px;width:680px;height:195px}.handLabel{display:none}
+.hand{height:100%;display:flex;justify-content:center;align-items:flex-end;overflow:visible;touch-action:none;user-select:none;-webkit-user-select:none}
+.card{flex:0 0 66px;width:66px;height:132px;margin-left:-31px;background:#fffdf5;color:#111;border:1px solid #a89d8a;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:7px;font-size:24px;font-weight:bold;line-height:1.05;box-shadow:0 5px 9px #0009;transform-origin:50% 100%;transform:translateY(var(--card-drop,0px)) rotate(var(--card-angle,0deg));transition:transform .1s,box-shadow .1s}
+.card:first-child{margin-left:0}.card.red{color:#c72128}.card.illegal{opacity:.28;pointer-events:none}.card.preview{transform:translateY(calc(var(--card-drop,0px) - 38px)) rotate(var(--card-angle,0deg)) scale(1.07);z-index:1000!important;box-shadow:0 16px 20px #000}
+.dummyWrap{left:390px;top:115px;width:500px;height:125px}.dummyWrap .handLabel{display:block;width:max-content;padding:4px 7px;background:#140b07dd;border-radius:6px;font-size:15px}.dummyWrap .hand{align-items:flex-start}.dummyWrap .card{flex-basis:45px;width:45px;height:82px;margin-left:-21px;font-size:17px}
 
-  .auctionChooser{
-    left:1%!important;
-    bottom:18%!important;
-    width:26%!important;
-    max-height:56%!important;
-    overflow:auto!important;
-    border-width:1px!important;
-  }
-  .auctionChooser h2,.infoBox h2{font-size:10px!important;padding:3px!important}
-  .auctionHeader span{padding:2px!important;font-size:9px!important}
-  .auctionButtons button{min-height:21px!important;font-size:9px!important;padding:0!important}
-  .auctionActions{gap:2px!important;padding:3px!important}
-  .auctionActions button{min-height:26px!important;font-size:9px!important}
-  .auctionHelp{font-size:8px!important;padding:2px!important}
-
-  .rightRail{
-    right:1%!important;
-    top:1%!important;
-    width:17%!important;
-    min-width:0!important;
-  }
-  .infoBox{margin-bottom:5px!important;border-width:1px!important}
-  .infoBox h3{font-size:9px!important;padding:2px!important}
-  #contractPretty,#leadPretty{padding:3px!important;font-size:9px!important}
-  #contractPretty strong{font-size:15px!important}
-  .scoreGrid>*{padding:2px!important;font-size:8px!important}
-  .historyBox{min-height:0!important;max-height:26vh!important;overflow:auto!important}
-  .historyHead span,.histRow>*{font-size:7px!important;padding:2px!important}
-  .sideBtn{min-height:25px!important;font-size:8px!important;margin:2px 0!important}
-
-  .tableCore{
-    left:28%!important;
-    right:19%!important;
-    top:18%!important;
-    bottom:24%!important;
-  }
-  .playedCard{width:38px!important;height:52px!important;font-size:15px!important}
-  .compass{font-size:9px!important}
-
-  .southHand{
-    left:25%!important;
-    right:18%!important;
-    bottom:10%!important;
-    height:29vh!important;
-  }
-  .card{
-    flex-basis:39px!important;
-    width:39px!important;
-    height:82px!important;
-    margin-left:-18px!important;
-    font-size:15px!important;
-    border-radius:5px!important;
-    padding-top:4px!important;
-  }
-  .card.preview{
-    transform:translateY(calc(var(--card-drop,0px) - 28px)) rotate(var(--card-angle,0deg)) scale(1.06)!important;
-  }
-  .dummyHand{
-    left:33%!important;
-    right:28%!important;
-    top:14%!important;
-    height:18vh!important;
-  }
-  .dummyHand .card{
-    flex-basis:29px!important;width:29px!important;height:56px!important;margin-left:-14px!important;font-size:11px!important
-  }
-
-  .bottomBar{
-    height:9%!important;
-    grid-template-columns:1fr 1fr 1.35fr 1fr!important;
-    gap:1%!important;
-    padding:.4% 2%!important;
-  }
-  .bottomBar button{font-size:8px!important;height:72%!important;padding:2px!important}
-  .newDeal{display:block!important;position:absolute!important;right:1%!important;top:-52%!important;width:14%!important;height:42%!important}
-  .status{left:31%!important;right:24%!important;bottom:9.2%!important;font-size:8px!important;padding:3px!important}
-  .playControls{left:1%!important;bottom:10%!important;gap:2px!important}
-  .playControls button{font-size:8px!important;padding:4px!important}
-}
-
-/* Portrait mode: compact playable layout instead of blocking screen */
-@media (orientation:portrait) and (max-width:700px){
-  .game{
-    width:100vw!important;
-    height:100dvh!important;
-  }
-  .referenceBg{object-position:center center!important}
-  .auctionChooser{
-    width:42%!important;
-    left:1%!important;
-    bottom:20%!important;
-    max-height:42%!important;
-  }
-  .rightRail{
-    width:28%!important;
-    right:1%!important;
-    top:1%!important;
-  }
-  .northPlate{left:40%!important}
-  .westPlate{top:13%!important}
-  .eastPlate{right:22%!important;top:13%!important}
-  .southPlate{left:38%!important;bottom:12%!important;width:24%!important}
-  .tableCore{left:28%!important;right:29%!important;top:18%!important;bottom:29%!important}
-  .southHand{left:8%!important;right:8%!important;bottom:10%!important;height:25vh!important}
-  .card{flex-basis:34px!important;width:34px!important;height:72px!important;margin-left:-17px!important;font-size:13px!important}
-  .bottomBar{grid-template-columns:1fr 1fr!important;height:11%!important}
-  .bottomBar button{font-size:8px!important}
-  .status{bottom:11.2%!important;left:20%!important;right:20%!important}
-}
-
-/* V7.1 hotfix: required deal info, compact and unobtrusive */
-.dealBadge{
-  position:absolute;z-index:12;left:1%;top:1%;
-  padding:5px 8px;border-radius:7px;
-  background:#120c08c9;border:1px solid #9b6031;
-  color:#f3dfbd;font:700 11px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  pointer-events:none;
-}
-@media(max-width:900px){
-  .dealBadge{font-size:8px;padding:3px 5px;max-width:22vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-}
+.playControls{position:absolute;z-index:15;left:18px;bottom:72px;display:flex;gap:6px}.playControls button{height:42px;padding:0 11px;border:1px solid #c17b3c;border-radius:7px;background:#4c1e13;color:#fff;font-size:13px}
+.status{position:absolute;z-index:14;left:390px;bottom:72px;width:500px;padding:6px 10px;text-align:center;background:#120b08df;border:1px solid #a66834;border-radius:7px;font-size:13px}
+.bottomBar{position:absolute;z-index:20;left:0;right:0;bottom:0;height:72px;background:#0c0b0aec;border-top:2px solid #9c261f;display:grid;grid-template-columns:1fr 1fr 1.5fr 1.2fr;gap:15px;padding:12px 24px}
+.bottomBar button{border:1px solid #bd7736;border-radius:8px;background:linear-gradient(#3d2117,#17110d);color:#fff;font-size:15px}.bottomBar button:nth-child(2),.bottomBar button:nth-child(3){background:linear-gradient(#81301f,#35130e)}
+.hidden{display:none!important}

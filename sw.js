@@ -1,5 +1,5 @@
-const CACHE='bridge-maman-v80';
-const ASSETS=['./','index.html','styles.css?v=80','app.js?v=80','manifest.webmanifest','bridge-reference.jpg'];
+const CACHE='bridge-maman-v90';
+const ASSETS=['./','index.html','styles.css?v=90','app.js?v=90','manifest.webmanifest'];
 self.addEventListener('install',e=>{self.skipWaiting();});
 self.addEventListener('activate',e=>e.waitUntil(
   caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())
@@ -11,8 +11,6 @@ self.addEventListener('fetch',e=>{
     return;
   }
   e.respondWith(fetch(req).then(resp=>{
-    const copy=resp.clone();
-    caches.open(CACHE).then(c=>c.put(req,copy));
-    return resp;
+    const copy=resp.clone(); caches.open(CACHE).then(c=>c.put(req,copy)); return resp;
   }).catch(()=>caches.match(req)));
 });

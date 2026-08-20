@@ -1,84 +1,81 @@
 <!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="theme-color" content="#130b07">
-  <title>Bridge Maman</title>
-  <link rel="manifest" href="manifest.webmanifest">
-  <link rel="stylesheet" href="styles.css?v=80">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#160d08">
+<title>Bridge Maman</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="styles.css?v=90">
 </head>
 <body>
+<div id="viewport">
+<main id="game" class="game">
+  <div class="wood"></div>
+  <div class="table"></div>
 
-<main class="game">\n  <div class="dealBadge" id="dealInfo">Donne 1</div>
-  <img class="referenceBg" src="bridge-reference.jpg" alt="" aria-hidden="true">
+  <div class="dealBadge" id="dealInfo">Donne 1</div>
 
+  <div class="player northVisual"><div class="avatar">👨🏻</div></div>
+  <div class="player westVisual"><div class="avatar">🧑🏻</div></div>
+  <div class="player eastVisual"><div class="avatar">👩🏼</div></div>
 
   <div class="namePlate northPlate" id="plateN"><b>NORD</b><span>Jean</span><small>Robot</small></div>
   <div class="namePlate westPlate" id="plateW"><b>OUEST</b><span>Marc</span><small>Robot</small></div>
   <div class="namePlate eastPlate" id="plateE"><b>EST</b><span>Claire</span><small>Robot</small></div>
-  <div class="namePlate southPlate active" id="plateS"><b>SUD - Vous</b><span>0 point</span></div>
+  <div class="namePlate southPlate active" id="plateS"><b>SUD - Vous</b><span>Joueur</span></div>
 
-  <div id="seatN" class="engineSeat hidden"></div>
-  <div id="seatW" class="engineSeat hidden"></div>
-  <div id="seatE" class="engineSeat hidden"></div>
-  <div id="seatS" class="engineSeat hidden"></div>
+  <div id="seatN" class="engineSeat"></div>
+  <div id="seatW" class="engineSeat"></div>
+  <div id="seatE" class="engineSeat"></div>
+  <div id="seatS" class="engineSeat"></div>
 
-  <section class="auctionChooser" id="bidControls">
+  <section class="auctionPanel" id="bidControls">
     <h2>ENCHÈRES</h2>
-    <div class="auctionHeader">
-      <span>SA</span><span class="red">♥</span><span>♠</span><span class="red">♦</span><span>♣</span>
+    <div class="prettyHeader">
+      <span class="redSuit">♥</span><span>♠</span><span class="redSuit">♦</span><span>♣</span><span>SA</span>
     </div>
-    <div class="auctionButtons" id="prettyBids"></div>
-
-    <div class="engineControls">
+    <div class="prettyBids" id="prettyBids"></div>
+    <div class="engineBid">
       <div id="bidLevels"></div>
       <div id="strainRow"></div>
     </div>
-
     <div class="auctionActions">
-      <button id="redoubleBtn" class="blue">XX</button>
-      <button id="doubleBtn" class="redBtn">X</button>
-      <button id="passBtn" class="green">PASSE</button>
+      <button id="redoubleBtn" class="xx">XX</button>
+      <button id="doubleBtn" class="x">X</button>
+      <button id="passBtn" class="pass">PASSE</button>
     </div>
-    <div class="auctionHelp">Touchez l’enchère choisie</div>
   </section>
 
   <section class="rightRail">
-    <div class="infoBox contractBox">
+    <div class="box">
       <h2>CONTRAT</h2>
-      <div id="contractPretty"><strong>—</strong><span>Enchères</span></div>
+      <div id="contractPretty" class="contractPretty"><strong>—</strong><span>Enchères</span></div>
       <h3>ENTAME</h3>
-      <div id="leadPretty">—</div>
+      <div id="leadPretty" class="leadPretty">—</div>
       <h3>SCORE</h3>
-      <div class="scoreGrid"><span>Nous</span><span>Eux</span><b id="scoreNS">0</b><b id="scoreEW">0</b></div>
+      <div class="score"><span>Nous</span><span>Eux</span><b id="scoreNS">0</b><b id="scoreEW">0</b></div>
     </div>
-
-    <div class="infoBox historyBox">
+    <div class="box historyBox">
       <h2>HISTORIQUE</h2>
-      <div class="historyHead"><span>Joueur</span><span>Enchère</span></div>
+      <div class="histHead"><span>Joueur</span><span>Enchère</span></div>
       <div id="historyBody"></div>
     </div>
-
-    <button id="settingsBtn" class="sideBtn">⚙ PARAMÈTRES</button>
-    <button id="rulesBtn" class="sideBtn">▣ RÈGLES</button>
-    <button id="quitBtn" class="sideBtn">↪ QUITTER</button>
   </section>
 
   <section class="tableCore">
-    <div id="auctionPanel" class="hiddenEngine">
+    <div id="auctionPanel" class="engineAuction">
       <table><tbody id="auctionBody"></tbody></table>
       <div id="contractLine">Enchères en cours.</div>
     </div>
-
     <div id="playPanel" class="hidden">
-      <div class="playedCard n" id="trickN">—</div>
-      <div class="playedCard w" id="trickW">—</div>
+      <div class="played n" id="trickN">—</div>
+      <div class="played w" id="trickW">—</div>
       <div class="compass">N<br><span>O ◇ E</span><br>S</div>
-      <div class="playedCard e" id="trickE">—</div>
-      <div class="playedCard s" id="trickS">—</div>
+      <div class="played e" id="trickE">—</div>
+      <div class="played s" id="trickS">—</div>
       <div id="scoreLine" class="hidden"></div>
     </div>
   </section>
@@ -88,7 +85,7 @@
     <div class="hand" id="handS"></div>
   </section>
 
-  <section class="handWrap dummyHand hidden" id="dummyWrap">
+  <section class="handWrap dummyWrap hidden" id="dummyWrap">
     <div class="handLabel" id="dummyLabel">Mort</div>
     <div class="hand" id="dummyHand"></div>
   </section>
@@ -99,69 +96,56 @@
     <button id="claimBtn">FINIR AUTO</button>
   </section>
 
-  <div class="bottomBar">
+  <div class="status" id="status">Distribution en cours…</div>
+
+  <footer class="bottomBar">
     <button id="backBtn">↶ REVENIR</button>
     <button id="adviceBtn">💡 CONSEIL</button>
     <button id="replayDealBtn">🃏 REJOUER LA DONNE</button>
-    <button id="chatBtn">💬 CHAT</button>
-    <button id="newDealBtn" class="newDeal">↻ NOUVELLE DONNE</button>
-  </div>
+    <button id="newDealBtn">↻ NOUVELLE DONNE</button>
+  </footer>
 
-  <div class="status" id="status">Distribution en cours…</div>
   <button id="hintBidBtn" class="hidden">Conseil</button>
   <button id="installBtn" class="hidden">Installer</button>
 </main>
+</div>
 
-<dialog id="rulesDialog">
-  <h2>Règles</h2>
-  <p>Bridge à 4 joueurs. Le jeu respecte la couleur demandée et les enchères utilisent le classement officiel ♣ ♦ ♥ ♠ SA. L’affichage, lui, suit votre ordre ♥ ♠ ♦ ♣.</p>
-  <button>Fermer</button>
-</dialog>
-<dialog id="settingsDialog">
-  <h2>Paramètres</h2>
-  <p>Bridge Maman — présentation simplifiée et tactile.</p>
-  <button>Fermer</button>
-</dialog>
-
-<script src="app.js?v=80"></script>
+<script src="app.js?v=90"></script>
 <script>
 (() => {
-  const DISPLAY_SUITS=['♥','♠','♦','♣'];
-  const box=document.getElementById('prettyBids');
+  const DISPLAY=['♥','♠','♦','♣','SA'];
+  const wrap=document.getElementById('prettyBids');
   for(let level=1; level<=7; level++){
-    const nt=document.createElement('button');
-    nt.textContent=level+'SA';
-    nt.addEventListener('click',()=>makePrettyBid(level,'SA'));
-    box.appendChild(nt);
-    DISPLAY_SUITS.forEach(s=>{
+    DISPLAY.forEach(s=>{
       const b=document.createElement('button');
-      b.innerHTML=level+'<span class="'+((s==='♥'||s==='♦')?'red':'')+'">'+s+'</span>';
-      b.addEventListener('click',()=>makePrettyBid(level,s));
-      box.appendChild(b);
+      b.innerHTML=level+(s==='SA'?'SA':'<span class="'+((s==='♥'||s==='♦')?'redSuit':'')+'">'+s+'</span>');
+      b.onclick=()=>{
+        const levelButtons=[...document.querySelectorAll('#bidLevels button')];
+        levelButtons[level-1]?.click();
+        const strainButtons=[...document.querySelectorAll('#strainRow button')];
+        strainButtons.find(x=>x.textContent.trim()===s)?.click();
+      };
+      wrap.appendChild(b);
     });
   }
 
-  function makePrettyBid(level,strain){
-    const levels=[...document.querySelectorAll('#bidLevels button')];
-    levels[level-1]?.click();
-    const strains=[...document.querySelectorAll('#strainRow button')];
-    strains.find(b=>b.textContent.trim()===strain)?.click();
-  }
-
   const byId=id=>document.getElementById(id);
-  byId('adviceBtn').addEventListener('click',()=>{
-    const play=!byId('playControls').classList.contains('hidden');
-    (play ? byId('hintCardBtn') : byId('hintBidBtn')).click();
-  });
-  byId('backBtn').addEventListener('click',()=>history.back());
-  byId('chatBtn').addEventListener('click',()=>alert('Chat Bridge Maman : fonctionnalité prévue, sans modifier la partie.'));
-  byId('quitBtn').addEventListener('click',()=>history.back());
+  byId('adviceBtn').onclick=()=>{
+    const playing=!byId('playControls').classList.contains('hidden');
+    (playing?byId('hintCardBtn'):byId('hintBidBtn')).click();
+  };
+  byId('backBtn').onclick=()=>history.back();
 
-  const rd=byId('rulesDialog'), sd=byId('settingsDialog');
-  byId('rulesBtn').addEventListener('click',()=>rd.showModal());
-  byId('settingsBtn').addEventListener('click',()=>sd.showModal());
-  rd.querySelector('button').addEventListener('click',()=>rd.close());
-  sd.querySelector('button').addEventListener('click',()=>sd.close());
+  function fitGame(){
+    const g=byId('game'), v=byId('viewport');
+    const scale=Math.min(window.innerWidth/1280, window.innerHeight/720);
+    g.style.transform=`scale(${scale})`;
+    v.style.width=(1280*scale)+'px';
+    v.style.height=(720*scale)+'px';
+  }
+  addEventListener('resize',fitGame);
+  addEventListener('orientationchange',()=>setTimeout(fitGame,120));
+  fitGame();
 })();
 </script>
 </body>

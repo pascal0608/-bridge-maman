@@ -1,9 +1,9 @@
 {
-  "name": "Bridge Maman V8",
+  "name": "Bridge Maman V9",
   "short_name": "Bridge Maman",
   "start_url": "./",
   "display": "standalone",
   "orientation": "any",
-  "background_color": "#130b07",
-  "theme_color": "#130b07"
+  "background_color": "#080604",
+  "theme_color": "#160d08"
 }
