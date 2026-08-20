@@ -1,5 +1,5 @@
-const CACHE='bridge-maman-v40';
-const ASSETS=['./','index.html','styles.css?v=40','app.js?v=40','manifest.webmanifest'];
+const CACHE='bridge-maman-v41';
+const ASSETS=['./','index.html','styles.css?v=41','app.js?v=41','manifest.webmanifest'];
 self.addEventListener('install',e=>{self.skipWaiting();});
 self.addEventListener('activate',e=>e.waitUntil(
   caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())

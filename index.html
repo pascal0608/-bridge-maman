@@ -5,88 +5,124 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="theme-color" content="#0d5c2f">
+  <meta name="theme-color" content="#34190f">
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="stylesheet" href="styles.css?v=40">
+  <link rel="stylesheet" href="styles.css?v=41">
   <title>Bridge Maman</title>
 </head>
 <body>
-  <main class="app">
-    <header class="topbar">
-      <div>
-        <div class="brand">Bridge Maman</div>
-        <div class="sub" id="dealInfo">Donne 1</div>
-      </div>
-      <div class="topActions">
-        <button class="iconBtn" id="replayDealBtn" aria-label="Rejouer la dernière donne" title="Rejouer la dernière donne">↶</button>
-        <button class="iconBtn" id="newDealBtn" aria-label="Nouvelle donne" title="Nouvelle donne">↻</button>
-      </div>
-    </header>
+<main class="app">
+  <header class="topbar">
+    <div>
+      <div class="brand">Bridge Maman <span class="heart">♥</span><span class="club">♣</span></div>
+      <div class="sub" id="dealInfo">Donne 1</div>
+    </div>
+    <div class="topActions">
+      <button class="iconBtn" id="replayDealBtn" aria-label="Rejouer la dernière donne" title="Rejouer la dernière donne">↶</button>
+      <button class="iconBtn" id="newDealBtn" aria-label="Nouvelle donne" title="Nouvelle donne">↻</button>
+    </div>
+  </header>
 
-    <section class="table">
+  <section class="scene">
+    <div class="player northPlayer">
+      <div class="portrait male"><span class="head"></span><span class="body"></span></div>
       <div class="seat north" id="seatN">Nord<br><span>Robot</span></div>
+    </div>
+
+    <div class="player westPlayer">
+      <div class="portrait suit"><span class="head"></span><span class="body"></span></div>
       <div class="seat west" id="seatW">Ouest<br><span>Robot</span></div>
+    </div>
+
+    <div class="player eastPlayer">
+      <div class="portrait female"><span class="head"></span><span class="body"></span></div>
+      <div class="seat east" id="seatE">Est<br><span>Robot</span></div>
+    </div>
+
+    <div class="table">
       <div class="center">
-        <div id="auctionPanel">
+        <div id="auctionPanel" class="auctionPanel">
           <div class="panelTitle">Enchères</div>
           <table class="auction">
             <thead><tr><th>O</th><th>N</th><th>E</th><th>S</th></tr></thead>
             <tbody id="auctionBody"></tbody>
           </table>
-          <div class="contractLine" id="contractLine">À vous de jouer quand Sud est au tour.</div>
+          <div class="contractLine" id="contractLine">Enchères en cours.</div>
         </div>
 
-        <div id="playPanel" class="hidden">
+        <div id="playPanel" class="hidden playPanel">
           <div class="panelTitle">Pli en cours</div>
           <div class="trickGrid">
             <div class="trickPos n" id="trickN">—</div>
             <div class="trickPos w" id="trickW">—</div>
+            <div class="trickCompass">N<br><span>O ◆ E</span><br>S</div>
             <div class="trickPos e" id="trickE">—</div>
             <div class="trickPos s" id="trickS">—</div>
           </div>
           <div class="scoreline" id="scoreLine"></div>
         </div>
       </div>
-      <div class="seat east" id="seatE">Est<br><span>Robot</span></div>
-      <div class="seat south active" id="seatS">Sud<br><span>Vous</span></div>
-    </section>
+    </div>
 
-    <section class="handWrap" id="southWrap">
-      <div class="handLabel" id="southLabel">Votre main — Sud <span id="southHcp"></span></div>
-      <div class="hand" id="handS"></div>
-    </section>
+    <aside class="contractCard">
+      <div class="sideTitle">Contrat</div>
+      <div id="contractBox" class="contractBox"><b>—</b><span>Enchères</span></div>
+      <div class="sideTitle scoreTitle">Score</div>
+      <div class="scoreMini"><span>Nous</span><span>Eux</span><b id="scoreNSMini">0</b><b id="scoreEWMini">0</b></div>
+    </aside>
 
-    <section class="handWrap hidden" id="dummyWrap">
-      <div class="handLabel" id="dummyLabel">Mort</div>
-      <div class="hand" id="dummyHand"></div>
-    </section>
+    <div class="southSeat seat south active" id="seatS">Sud<br><span>Vous</span></div>
+  </section>
 
-    <section class="controls" id="bidControls">
-      <div class="bidLevels" id="bidLevels"></div>
-      <div class="strainRow" id="strainRow"></div>
-      <div class="actionRow">
-        <button id="passBtn" class="pass">Passe</button>
-        <button id="doubleBtn">X</button>
-        <button id="redoubleBtn">XX</button>
-        <button id="hintBidBtn" class="hint">Conseil</button>
-      </div>
-    </section>
+  <section class="handWrap" id="southWrap">
+    <div class="handLabel" id="southLabel">Votre main — Sud <span id="southHcp"></span></div>
+    <div class="hand" id="handS"></div>
+  </section>
 
-    <section class="controls hidden" id="playControls">
-      <div class="actionRow">
-        <button id="hintCardBtn" class="hint">Conseil carte</button>
-        <button id="analysisBtn">Analyse</button>
-        <button id="claimBtn">Finir automatiquement</button>
-      </div>
-    </section>
+  <section class="handWrap hidden" id="dummyWrap">
+    <div class="handLabel" id="dummyLabel">Mort</div>
+    <div class="hand" id="dummyHand"></div>
+  </section>
 
-    <section class="status" id="status">Distribution en cours…</section>
+  <section class="controls bidBoard" id="bidControls">
+    <div class="bidLevels" id="bidLevels"></div>
+    <div class="strainRow" id="strainRow"></div>
+    <div class="actionRow">
+      <button id="redoubleBtn" class="redouble">XX</button>
+      <button id="doubleBtn" class="double">X</button>
+      <button id="passBtn" class="pass">Passe</button>
+      <button id="hintBidBtn" class="hint">💡 Conseil</button>
+    </div>
+  </section>
 
-    <footer>
-      <button id="installBtn">Ajouter à l’écran d’accueil</button>
-      <div class="fineprint">SEF / Majeure 5e — robot d’entraînement avancé, pas un moteur de compétition.</div>
-    </footer>
-  </main>
-  <script src="app.js?v=40"></script>
+  <section class="controls hidden" id="playControls">
+    <div class="actionRow playActions">
+      <button id="hintCardBtn" class="hint">💡 Conseil carte</button>
+      <button id="analysisBtn">Analyse</button>
+      <button id="claimBtn">Finir auto</button>
+    </div>
+  </section>
+
+  <section class="status" id="status">Distribution en cours…</section>
+
+  <footer>
+    <button id="installBtn">Ajouter à l’écran d’accueil</button>
+    <div class="fineprint">SEF / Majeure 5e — entraînement.</div>
+  </footer>
+</main>
+<script src="app.js?v=41"></script>
+<script>
+  // Mini score mirrors the engine score without changing the game logic.
+  const miniObserver = new MutationObserver(() => {
+    const txt = document.getElementById('scoreLine')?.textContent || '';
+    const m = txt.match(/Nord-Sud\s+(\d+).*Est-Ouest\s+(\d+)/);
+    if (m) {
+      document.getElementById('scoreNSMini').textContent = m[1];
+      document.getElementById('scoreEWMini').textContent = m[2];
+    }
+  });
+  const scoreNode = document.getElementById('scoreLine');
+  if (scoreNode) miniObserver.observe(scoreNode,{childList:true,subtree:true,characterData:true});
+</script>
 </body>
 </html>

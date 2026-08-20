@@ -1,3 +1,4 @@
+/* Bridge Maman V4.1 — vraie interface table illustrée */
 
 const SUITS=['♣','♦','♥','♠','SA'];
 const CARD_SUITS=['♠','♥','♦','♣'];
@@ -230,6 +231,7 @@ function finishAuction(){
   declarer=auction.find(a=>a.type==='bid'&&a.strain===contract.strain&&side(a.player)===declSide).player;
   dummy=next(next(declarer)); leader=next(declarer); current=leader; phase='play';
   $('contractLine').textContent=`Contrat : ${contract.level}${contract.strain}${contract.redoubled?'XX':contract.doubled?'X':''} par ${NAME[declarer]}`;
+  const cb=$('contractBox'); if(cb) cb.innerHTML=`<b>${contract.level}${contract.strain}${contract.redoubled?'XX':contract.doubled?'X':''}</b><span>par ${NAME[declarer]}</span>`;
   $('bidControls').classList.add('hidden'); $('playControls').classList.remove('hidden'); $('playPanel').classList.remove('hidden');
   seatActive(current); $('status').textContent=`Entame : ${NAME[leader]}.`;
   if(current!=='S') later(botCard,500);
@@ -332,7 +334,7 @@ function hintBid(){
 }
 function hintCard(){
   if(phase!=='play')return;
-  const human=(current==='S'&&dummy!=='S')||(declarer==='S'&&current===dummy); if(!human){$('status').textContent='Attendez le robot.';return}
+  const human=(current==='S')||(declarer==='S'&&current===dummy); if(!human){$('status').textContent='Attendez le robot.';return}
   const i=cheapWinningIndex(current); $('status').textContent=`Conseil : ${fmtCard(hands[current][i])}.`;
 }
 function autoFinish(){
@@ -352,6 +354,7 @@ function startDeal(initialHands, initialDealer, infoText){
   dealer=initialDealer;turn=dealer;auction=[];phase='auction';contract=null;declarer=dummy=leader=current=null;trick=[];leadSuit=null;tricksNS=tricksEW=0;dummyShown=false;
   $('dealInfo').textContent=infoText;
   $('contractLine').textContent='Enchères en cours.';
+  const cb=$('contractBox'); if(cb) cb.innerHTML='<b>—</b><span>Enchères</span>';
   $('bidControls').classList.remove('hidden');$('playControls').classList.add('hidden');$('playPanel').classList.add('hidden');
   renderAuction();renderHands();renderTrick();seatActive(turn);
   $('status').textContent=`${NAME[dealer]} donne. ${hcp(hands.S)} H pour Sud.`;
