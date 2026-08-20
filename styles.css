@@ -189,3 +189,15 @@ dialog{border:2px solid #a66b29;border-radius:12px;background:#f5ead2;color:#231
   .bottomBar button{font-size:8px!important}
   .status{bottom:11.2%!important;left:20%!important;right:20%!important}
 }
+
+/* V7.1 hotfix: required deal info, compact and unobtrusive */
+.dealBadge{
+  position:absolute;z-index:12;left:1%;top:1%;
+  padding:5px 8px;border-radius:7px;
+  background:#120c08c9;border:1px solid #9b6031;
+  color:#f3dfbd;font:700 11px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  pointer-events:none;
+}
+@media(max-width:900px){
+  .dealBadge{font-size:8px;padding:3px 5px;max-width:22vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+}

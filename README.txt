@@ -1,13 +1,11 @@
-BRIDGE MAMAN V7
+BRIDGE MAMAN V8
 ================
-Version corrigée pour téléphone.
-
-- fonctionne sur iPhone sans écran bloqué en portrait ;
-- interface nettement plus petite et adaptée au téléphone ;
-- panneau "Bridge Maman" en haut à gauche supprimé ;
-- présentation réaliste conservée ;
+Version basée sur la V7 corrigée.
+- correction du démarrage du jeu ;
+- affichage téléphone réduit ;
+- grand panneau Bridge Maman supprimé ;
 - ordre ♥ Cœur → ♠ Pique → ♦ Carreau → ♣ Trèfle ;
 - rejouer la dernière donne ;
 - carte qui se soulève sous le doigt ;
 - Sud choisit sa carte lorsqu'il est le mort ;
-- cache V7 pour forcer la mise à jour en ligne.
+- cache V8 pour forcer la mise à jour du site.
