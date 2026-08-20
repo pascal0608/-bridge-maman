@@ -34,3 +34,15 @@ dialog{border:2px solid #a66b29;border-radius:12px;background:#f5ead2;color:#231
   .portraitNotice{display:flex;position:fixed;z-index:1000;inset:0;align-items:center;justify-content:center;text-align:center;padding:40px;background:#130b07;color:#f5dfbd;font-size:24px;font-weight:bold}
   .game{visibility:hidden}
 }
+
+/* V6 — interface légèrement réduite, panneau titre supprimé */
+.logoPanel{display:none!important}
+.namePlate{transform:scale(.90);transform-origin:center}
+.auctionChooser{width:23%;bottom:16.5%;transform:scale(.94);transform-origin:left bottom}
+.rightRail{width:13.5%;min-width:150px;transform:scale(.94);transform-origin:right top}
+.southHand{left:27%;right:20%;bottom:10%;height:195px}
+.card{flex-basis:70px;width:70px;height:140px;margin-left:-33px;font-size:25px}
+.card:first-child{margin-left:0}
+.bottomBar{height:8.7%;padding:.55% 5%}
+.status{bottom:8.9%}
+.southPlate{bottom:10%}
