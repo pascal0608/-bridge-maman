@@ -1,6 +1,7 @@
-/* Bridge Maman V4.1 — vraie interface table illustrée */
+/* Bridge Maman V5.1 — maquette validée + toutes modifications */
 
-const SUITS=['♣','♦','♥','♠','SA'];
+const SUITS=['♥','♠','♦','♣','SA'];
+const BID_ORDER=['♣','♦','♥','♠','SA'];
 const CARD_SUITS=['♠','♥','♦','♣'];
 const RANKS=['A','R','D','V','10','9','8','7','6','5','4','3','2'];
 const RV={A:14,R:13,D:12,V:11,'10':10,'9':9,'8':8,'7':7,'6':6,'5':5,'4':4,'3':3,'2':2};
@@ -20,18 +21,10 @@ function deck(){
   return d;
 }
 function sortHand(h){
-  const suitOrder=['♠','♥','♣','♦'];
-  const buckets={};
-  suitOrder.forEach(s=>buckets[s]=h.filter(c=>c.s===s).sort((a,b)=>RANKS.indexOf(a.r)-RANKS.indexOf(b.r)));
-  const result=[];
-  let more=true;
-  while(more){
-    more=false;
-    for(const s of suitOrder){
-      if(buckets[s].length){ result.push(buckets[s].shift()); more=true; }
-    }
-  }
-  return result;
+  const suitOrder=['♥','♠','♦','♣'];
+  return suitOrder.flatMap(s=>
+    h.filter(c=>c.s===s).sort((a,b)=>RANKS.indexOf(a.r)-RANKS.indexOf(b.r))
+  );
 }
 function hcp(h){return h.reduce((n,c)=>n+(HCP[c.r]||0),0)}
 function shape(h){return CARD_SUITS.map(s=>h.filter(c=>c.s===s).length)}
@@ -42,11 +35,11 @@ function side(p){return (p==='N'||p==='S')?'NS':'EW'}
 
 function bidRank(b){
   if(!b || b.type!=='bid') return -1;
-  return (b.level-1)*5+SUITS.indexOf(b.strain);
+  return (b.level-1)*5+BID_ORDER.indexOf(b.strain);
 }
 function lastRealBid(){for(let i=auction.length-1;i>=0;i--)if(auction[i].type==='bid')return auction[i];return null}
 function lastNonPass(){for(let i=auction.length-1;i>=0;i--)if(auction[i].type!=='pass')return auction[i];return null}
-function legalBid(level,strain){const last=lastRealBid(); return !last || ((level-1)*5+SUITS.indexOf(strain))>bidRank(last)}
+function legalBid(level,strain){const last=lastRealBid(); return !last || ((level-1)*5+BID_ORDER.indexOf(strain))>bidRank(last)}
 function canDouble(){
   const x=lastNonPass(); if(!x||x.type!=='bid')return false;
   return side(x.player)!==side(turn);
@@ -73,9 +66,31 @@ function renderAuction(){
   }
   rows.push(row);
   rows.forEach(r=>{const tr=document.createElement('tr');r.forEach(v=>{const td=document.createElement('td');td.textContent=v;tr.appendChild(td)});body.appendChild(tr)});
+  syncPrettyAuction();
 }
+
+function syncPrettyAuction(){
+  const hist=$('historyBody');
+  if(hist){
+    hist.innerHTML='';
+    auction.slice(-16).forEach(a=>{
+      const row=document.createElement('div');
+      row.className='histRow';
+      const who=document.createElement('span'); who.textContent=NAME[a.player];
+      const val=document.createElement('b');
+      val.textContent=a.type==='pass'?'Passe':a.type==='double'?'X':a.type==='redouble'?'XX':`${a.level}${a.strain}`;
+      row.append(who,val); hist.appendChild(row);
+    });
+  }
+}
+
 function seatActive(p){
-  ['W','N','E','S'].forEach(x=>$('seat'+x).classList.toggle('active',x===p));
+  ['W','N','E','S'].forEach(x=>{
+    const seat=$('seat'+x);
+    if(seat) seat.classList.toggle('active',x===p);
+    const plate=$('plate'+x);
+    if(plate) plate.classList.toggle('active',x===p);
+  });
 }
 
 function enableFingerSelection(el,player){
@@ -163,6 +178,8 @@ function renderTrick(){
     e.textContent=x?fmtCard(x.c):'—'; e.style.color=x&&isRed(x.c)?'#d41d2c':'#111';
   });
   $('scoreLine').textContent=`Nord-Sud ${tricksNS} pli(s) • Est-Ouest ${tricksEW} pli(s)`;
+  const ns=$('scoreNS'); const ew=$('scoreEW');
+  if(ns) ns.textContent=tricksNS; if(ew) ew.textContent=tricksEW;
 }
 
 function addBid(obj){
@@ -231,7 +248,9 @@ function finishAuction(){
   declarer=auction.find(a=>a.type==='bid'&&a.strain===contract.strain&&side(a.player)===declSide).player;
   dummy=next(next(declarer)); leader=next(declarer); current=leader; phase='play';
   $('contractLine').textContent=`Contrat : ${contract.level}${contract.strain}${contract.redoubled?'XX':contract.doubled?'X':''} par ${NAME[declarer]}`;
-  const cb=$('contractBox'); if(cb) cb.innerHTML=`<b>${contract.level}${contract.strain}${contract.redoubled?'XX':contract.doubled?'X':''}</b><span>par ${NAME[declarer]}</span>`;
+  const cp=$('contractPretty');
+  if(cp) cp.innerHTML=`<strong>${contract.level}${contract.strain}${contract.redoubled?'XX':contract.doubled?'X':''}</strong><span>Par : ${NAME[declarer]}</span>`;
+  const lp=$('leadPretty'); if(lp) lp.textContent=`${NAME[leader]} entame`;
   $('bidControls').classList.add('hidden'); $('playControls').classList.remove('hidden'); $('playPanel').classList.remove('hidden');
   seatActive(current); $('status').textContent=`Entame : ${NAME[leader]}.`;
   if(current!=='S') later(botCard,500);
@@ -354,7 +373,10 @@ function startDeal(initialHands, initialDealer, infoText){
   dealer=initialDealer;turn=dealer;auction=[];phase='auction';contract=null;declarer=dummy=leader=current=null;trick=[];leadSuit=null;tricksNS=tricksEW=0;dummyShown=false;
   $('dealInfo').textContent=infoText;
   $('contractLine').textContent='Enchères en cours.';
-  const cb=$('contractBox'); if(cb) cb.innerHTML='<b>—</b><span>Enchères</span>';
+  const cp=$('contractPretty'); if(cp) cp.innerHTML='<strong>—</strong><span>Enchères</span>';
+  const lp=$('leadPretty'); if(lp) lp.textContent='—';
+  const ns=$('scoreNS'); const ew=$('scoreEW'); if(ns) ns.textContent='0'; if(ew) ew.textContent='0';
+  const hist=$('historyBody'); if(hist) hist.innerHTML='';
   $('bidControls').classList.remove('hidden');$('playControls').classList.add('hidden');$('playPanel').classList.add('hidden');
   renderAuction();renderHands();renderTrick();seatActive(turn);
   $('status').textContent=`${NAME[dealer]} donne. ${hcp(hands.S)} H pour Sud.`;

@@ -5,124 +5,170 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="theme-color" content="#34190f">
-  <link rel="manifest" href="manifest.webmanifest">
-  <link rel="stylesheet" href="styles.css?v=41">
+  <meta name="theme-color" content="#130b07">
   <title>Bridge Maman</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="styles.css?v=51">
 </head>
 <body>
-<main class="app">
-  <header class="topbar">
-    <div>
-      <div class="brand">Bridge Maman <span class="heart">♥</span><span class="club">♣</span></div>
-      <div class="sub" id="dealInfo">Donne 1</div>
-    </div>
-    <div class="topActions">
-      <button class="iconBtn" id="replayDealBtn" aria-label="Rejouer la dernière donne" title="Rejouer la dernière donne">↶</button>
-      <button class="iconBtn" id="newDealBtn" aria-label="Nouvelle donne" title="Nouvelle donne">↻</button>
-    </div>
+<div class="portraitNotice">Tournez l’iPhone en paysage pour retrouver la table complète.</div>
+
+<main class="game">
+  <img class="referenceBg" src="bridge-reference.jpg" alt="" aria-hidden="true">
+
+  <header class="logoPanel">
+    <div class="brand">Bridge Maman <span>♥♣</span></div>
+    <div class="tagline">Le plaisir de jouer ensemble</div>
+    <div class="dealInfo" id="dealInfo">Donne 1</div>
   </header>
 
-  <section class="scene">
-    <div class="player northPlayer">
-      <div class="portrait male"><span class="head"></span><span class="body"></span></div>
-      <div class="seat north" id="seatN">Nord<br><span>Robot</span></div>
+  <div class="namePlate northPlate" id="plateN"><b>NORD</b><span>Jean</span><small>Robot</small></div>
+  <div class="namePlate westPlate" id="plateW"><b>OUEST</b><span>Marc</span><small>Robot</small></div>
+  <div class="namePlate eastPlate" id="plateE"><b>EST</b><span>Claire</span><small>Robot</small></div>
+  <div class="namePlate southPlate active" id="plateS"><b>SUD - Vous</b><span>0 point</span></div>
+
+  <div id="seatN" class="engineSeat hidden"></div>
+  <div id="seatW" class="engineSeat hidden"></div>
+  <div id="seatE" class="engineSeat hidden"></div>
+  <div id="seatS" class="engineSeat hidden"></div>
+
+  <section class="auctionChooser" id="bidControls">
+    <h2>ENCHÈRES</h2>
+    <div class="auctionHeader">
+      <span>SA</span><span class="red">♥</span><span>♠</span><span class="red">♦</span><span>♣</span>
+    </div>
+    <div class="auctionButtons" id="prettyBids"></div>
+
+    <div class="engineControls">
+      <div id="bidLevels"></div>
+      <div id="strainRow"></div>
     </div>
 
-    <div class="player westPlayer">
-      <div class="portrait suit"><span class="head"></span><span class="body"></span></div>
-      <div class="seat west" id="seatW">Ouest<br><span>Robot</span></div>
+    <div class="auctionActions">
+      <button id="redoubleBtn" class="blue">XX</button>
+      <button id="doubleBtn" class="redBtn">X</button>
+      <button id="passBtn" class="green">PASSE</button>
     </div>
-
-    <div class="player eastPlayer">
-      <div class="portrait female"><span class="head"></span><span class="body"></span></div>
-      <div class="seat east" id="seatE">Est<br><span>Robot</span></div>
-    </div>
-
-    <div class="table">
-      <div class="center">
-        <div id="auctionPanel" class="auctionPanel">
-          <div class="panelTitle">Enchères</div>
-          <table class="auction">
-            <thead><tr><th>O</th><th>N</th><th>E</th><th>S</th></tr></thead>
-            <tbody id="auctionBody"></tbody>
-          </table>
-          <div class="contractLine" id="contractLine">Enchères en cours.</div>
-        </div>
-
-        <div id="playPanel" class="hidden playPanel">
-          <div class="panelTitle">Pli en cours</div>
-          <div class="trickGrid">
-            <div class="trickPos n" id="trickN">—</div>
-            <div class="trickPos w" id="trickW">—</div>
-            <div class="trickCompass">N<br><span>O ◆ E</span><br>S</div>
-            <div class="trickPos e" id="trickE">—</div>
-            <div class="trickPos s" id="trickS">—</div>
-          </div>
-          <div class="scoreline" id="scoreLine"></div>
-        </div>
-      </div>
-    </div>
-
-    <aside class="contractCard">
-      <div class="sideTitle">Contrat</div>
-      <div id="contractBox" class="contractBox"><b>—</b><span>Enchères</span></div>
-      <div class="sideTitle scoreTitle">Score</div>
-      <div class="scoreMini"><span>Nous</span><span>Eux</span><b id="scoreNSMini">0</b><b id="scoreEWMini">0</b></div>
-    </aside>
-
-    <div class="southSeat seat south active" id="seatS">Sud<br><span>Vous</span></div>
+    <div class="auctionHelp">Touchez l’enchère choisie</div>
   </section>
 
-  <section class="handWrap" id="southWrap">
+  <section class="rightRail">
+    <div class="infoBox contractBox">
+      <h2>CONTRAT</h2>
+      <div id="contractPretty"><strong>—</strong><span>Enchères</span></div>
+      <h3>ENTAME</h3>
+      <div id="leadPretty">—</div>
+      <h3>SCORE</h3>
+      <div class="scoreGrid"><span>Nous</span><span>Eux</span><b id="scoreNS">0</b><b id="scoreEW">0</b></div>
+    </div>
+
+    <div class="infoBox historyBox">
+      <h2>HISTORIQUE</h2>
+      <div class="historyHead"><span>Joueur</span><span>Enchère</span></div>
+      <div id="historyBody"></div>
+    </div>
+
+    <button id="settingsBtn" class="sideBtn">⚙ PARAMÈTRES</button>
+    <button id="rulesBtn" class="sideBtn">▣ RÈGLES</button>
+    <button id="quitBtn" class="sideBtn">↪ QUITTER</button>
+  </section>
+
+  <section class="tableCore">
+    <div id="auctionPanel" class="hiddenEngine">
+      <table><tbody id="auctionBody"></tbody></table>
+      <div id="contractLine">Enchères en cours.</div>
+    </div>
+
+    <div id="playPanel" class="hidden">
+      <div class="playedCard n" id="trickN">—</div>
+      <div class="playedCard w" id="trickW">—</div>
+      <div class="compass">N<br><span>O ◇ E</span><br>S</div>
+      <div class="playedCard e" id="trickE">—</div>
+      <div class="playedCard s" id="trickS">—</div>
+      <div id="scoreLine" class="hidden"></div>
+    </div>
+  </section>
+
+  <section class="handWrap southHand" id="southWrap">
     <div class="handLabel" id="southLabel">Votre main — Sud <span id="southHcp"></span></div>
     <div class="hand" id="handS"></div>
   </section>
 
-  <section class="handWrap hidden" id="dummyWrap">
+  <section class="handWrap dummyHand hidden" id="dummyWrap">
     <div class="handLabel" id="dummyLabel">Mort</div>
     <div class="hand" id="dummyHand"></div>
   </section>
 
-  <section class="controls bidBoard" id="bidControls">
-    <div class="bidLevels" id="bidLevels"></div>
-    <div class="strainRow" id="strainRow"></div>
-    <div class="actionRow">
-      <button id="redoubleBtn" class="redouble">XX</button>
-      <button id="doubleBtn" class="double">X</button>
-      <button id="passBtn" class="pass">Passe</button>
-      <button id="hintBidBtn" class="hint">💡 Conseil</button>
-    </div>
+  <section class="playControls hidden" id="playControls">
+    <button id="hintCardBtn">💡 CONSEIL CARTE</button>
+    <button id="analysisBtn">ANALYSE</button>
+    <button id="claimBtn">FINIR AUTO</button>
   </section>
 
-  <section class="controls hidden" id="playControls">
-    <div class="actionRow playActions">
-      <button id="hintCardBtn" class="hint">💡 Conseil carte</button>
-      <button id="analysisBtn">Analyse</button>
-      <button id="claimBtn">Finir auto</button>
-    </div>
-  </section>
+  <div class="bottomBar">
+    <button id="backBtn">↶ REVENIR</button>
+    <button id="adviceBtn">💡 CONSEIL</button>
+    <button id="replayDealBtn">🃏 REJOUER LA DONNE</button>
+    <button id="chatBtn">💬 CHAT</button>
+    <button id="newDealBtn" class="newDeal">↻ NOUVELLE DONNE</button>
+  </div>
 
-  <section class="status" id="status">Distribution en cours…</section>
-
-  <footer>
-    <button id="installBtn">Ajouter à l’écran d’accueil</button>
-    <div class="fineprint">SEF / Majeure 5e — entraînement.</div>
-  </footer>
+  <div class="status" id="status">Distribution en cours…</div>
+  <button id="hintBidBtn" class="hidden">Conseil</button>
+  <button id="installBtn" class="hidden">Installer</button>
 </main>
-<script src="app.js?v=41"></script>
+
+<dialog id="rulesDialog">
+  <h2>Règles</h2>
+  <p>Bridge à 4 joueurs. Le jeu respecte la couleur demandée et les enchères utilisent le classement officiel ♣ ♦ ♥ ♠ SA. L’affichage, lui, suit votre ordre ♥ ♠ ♦ ♣.</p>
+  <button>Fermer</button>
+</dialog>
+<dialog id="settingsDialog">
+  <h2>Paramètres</h2>
+  <p>Bridge Maman — présentation simplifiée et tactile.</p>
+  <button>Fermer</button>
+</dialog>
+
+<script src="app.js?v=51"></script>
 <script>
-  // Mini score mirrors the engine score without changing the game logic.
-  const miniObserver = new MutationObserver(() => {
-    const txt = document.getElementById('scoreLine')?.textContent || '';
-    const m = txt.match(/Nord-Sud\s+(\d+).*Est-Ouest\s+(\d+)/);
-    if (m) {
-      document.getElementById('scoreNSMini').textContent = m[1];
-      document.getElementById('scoreEWMini').textContent = m[2];
-    }
+(() => {
+  const DISPLAY_SUITS=['♥','♠','♦','♣'];
+  const box=document.getElementById('prettyBids');
+  for(let level=1; level<=7; level++){
+    const nt=document.createElement('button');
+    nt.textContent=level+'SA';
+    nt.addEventListener('click',()=>makePrettyBid(level,'SA'));
+    box.appendChild(nt);
+    DISPLAY_SUITS.forEach(s=>{
+      const b=document.createElement('button');
+      b.innerHTML=level+'<span class="'+((s==='♥'||s==='♦')?'red':'')+'">'+s+'</span>';
+      b.addEventListener('click',()=>makePrettyBid(level,s));
+      box.appendChild(b);
+    });
+  }
+
+  function makePrettyBid(level,strain){
+    const levels=[...document.querySelectorAll('#bidLevels button')];
+    levels[level-1]?.click();
+    const strains=[...document.querySelectorAll('#strainRow button')];
+    strains.find(b=>b.textContent.trim()===strain)?.click();
+  }
+
+  const byId=id=>document.getElementById(id);
+  byId('adviceBtn').addEventListener('click',()=>{
+    const play=!byId('playControls').classList.contains('hidden');
+    (play ? byId('hintCardBtn') : byId('hintBidBtn')).click();
   });
-  const scoreNode = document.getElementById('scoreLine');
-  if (scoreNode) miniObserver.observe(scoreNode,{childList:true,subtree:true,characterData:true});
+  byId('backBtn').addEventListener('click',()=>history.back());
+  byId('chatBtn').addEventListener('click',()=>alert('Chat Bridge Maman : fonctionnalité prévue, sans modifier la partie.'));
+  byId('quitBtn').addEventListener('click',()=>history.back());
+
+  const rd=byId('rulesDialog'), sd=byId('settingsDialog');
+  byId('rulesBtn').addEventListener('click',()=>rd.showModal());
+  byId('settingsBtn').addEventListener('click',()=>sd.showModal());
+  rd.querySelector('button').addEventListener('click',()=>rd.close());
+  sd.querySelector('button').addEventListener('click',()=>sd.close());
+})();
 </script>
 </body>
 </html>
