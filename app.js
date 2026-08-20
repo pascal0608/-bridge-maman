@@ -1,4 +1,4 @@
-/* Bridge Maman V9 — maquette validée + toutes modifications */
+/* Bridge Maman V11 — maquette validée + toutes modifications */
 
 const SUITS=['♥','♠','♦','♣','SA'];
 const BID_ORDER=['♣','♦','♥','♠','SA'];
@@ -10,7 +10,7 @@ const P=['W','N','E','S'];
 const NAME={W:'Ouest',N:'Nord',E:'Est',S:'Sud'};
 let hands={}, dealer='S', turn='S', auction=[], selectedLevel=1, selectedStrain='♣', dealNo=0;
 let phase='auction', contract=null, declarer=null, dummy=null, leader=null, current=null, trick=[], leadSuit=null, tricksNS=0, tricksEW=0, dummyShown=false;
-let lastDealSnapshot=null, runToken=0;
+let lastDealSnapshot=null, runToken=0, autoMode=false;
 
 const $=id=>document.getElementById(id);
 const cloneHands=src=>Object.fromEntries(P.map(p=>[p,(src[p]||[]).map(c=>({...c}))]));
@@ -190,10 +190,20 @@ function addBid(obj){
   else $('status').textContent='À vous, Sud.';
 }
 function humanBid(type){
-  if(phase!=='auction'||turn!=='S')return;
-  if(type==='pass')addBid({type:'pass'});
-  if(type==='double'&&canDouble())addBid({type:'double'});
-  if(type==='redouble'&&canRedouble())addBid({type:'redouble'});
+  if(phase!=='auction'||turn!=='S'){
+    $('status').textContent='Attendez votre tour pour enchérir.';
+    return;
+  }
+  if(type==='pass'){ addBid({type:'pass'}); return; }
+  if(type==='double'){
+    if(canDouble()) addBid({type:'double'});
+    else $('status').textContent='Contre (X) impossible dans cette situation.';
+    return;
+  }
+  if(type==='redouble'){
+    if(canRedouble()) addBid({type:'redouble'});
+    else $('status').textContent='Surcontre (XX) impossible dans cette situation.';
+  }
 }
 function makeHumanBid(){
   if(phase!=='auction'||turn!=='S')return;
@@ -328,16 +338,26 @@ function botCard(){
 }
 function advancePlay(){
   renderHands();
+  if(autoMode){
+    $('status').textContent='Fin automatique en cours…';
+    later(()=>{
+      if(phase==='play' && autoMode){
+        const i=cheapWinningIndex(current);
+        playCard(current,i);
+      }
+    },120);
+    return;
+  }
   const humanControls = (current==='S') || (declarer==='S' && current===dummy);
   if(humanControls){
     $('status').textContent=current==='S'?(dummy==='S'?'Sud est le mort : choisissez vous-même la carte à jouer.':'À vous, Sud.'):`À vous de jouer depuis le mort (${NAME[dummy]}).`;
   }else{
-    $('status').textContent=(dummy==='S' && current==='S')?'Sud est le mort : Nord joue cette carte.':`${NAME[current]} joue…`;
+    $('status').textContent=`${NAME[current]} joue…`;
     later(botCard,420);
   }
 }
 function endPlay(){
-  phase='done'; const target=6+contract.level; const won=side(declarer)==='NS'?tricksNS:tricksEW; const diff=won-target;
+  phase='done'; autoMode=false; const target=6+contract.level; const won=side(declarer)==='NS'?tricksNS:tricksEW; const diff=won-target;
   let txt=diff>=0?`Contrat réussi${diff?` +${diff}`:''}.`:`Contrat chuté de ${-diff}.`;
   $('status').textContent=`${txt} ${won} pli(s) pour le camp déclarant.`;
   $('playControls').classList.remove('hidden');
@@ -348,27 +368,28 @@ function analysis(){
   $('status').textContent=`Analyse : contrat ${contract.level}${contract.strain} par ${NAME[declarer]}. Objectif ${target} plis. Réalisés jusqu’ici : ${won}. Le robot privilégie la fourniture, la prise économique et l’atout.`;
 }
 function hintBid(){
-  if(phase!=='auction'||turn!=='S')return;
+  if(phase!=='auction'){ $('status').textContent='Les enchères sont terminées.'; return; }
+  if(turn!=='S'){ $('status').textContent='Attendez votre tour pour demander un conseil.'; return; }
   const b=botResponse('S'); $('status').textContent='Conseil SEF simplifié : '+(b.type==='pass'?'Passe':b.type==='bid'?`${b.level}${b.strain}`:b.type);
 }
 function hintCard(){
-  if(phase!=='play')return;
+  if(phase!=='play'){ $('status').textContent='Le jeu de la carte n’a pas encore commencé.'; return; }
   const human=(current==='S')||(declarer==='S'&&current===dummy); if(!human){$('status').textContent='Attendez le robot.';return}
   const i=cheapWinningIndex(current); $('status').textContent=`Conseil : ${fmtCard(hands[current][i])}.`;
 }
 function autoFinish(){
-  if(phase!=='play')return;
-  // switch all remaining play to robots
-  const old=side(declarer);
-  function loop(){
-    if(phase!=='play')return;
-    const i=cheapWinningIndex(current); playCard(current,i);
-    if(hands.S.length) later(loop,80);
+  if(phase!=='play'){
+    $('status').textContent='La partie de cartes n’a pas encore commencé.';
+    return;
   }
-  loop();
+  autoMode=true;
+  $('status').textContent='Fin automatique en cours…';
+  const i=cheapWinningIndex(current);
+  playCard(current,i);
 }
 function startDeal(initialHands, initialDealer, infoText){
   runToken++;
+  autoMode=false;
   hands=cloneHands(initialHands);
   dealer=initialDealer;turn=dealer;auction=[];phase='auction';contract=null;declarer=dummy=leader=current=null;trick=[];leadSuit=null;tricksNS=tricksEW=0;dummyShown=false;
   $('dealInfo').textContent=infoText;

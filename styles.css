@@ -52,3 +52,10 @@ border:18px solid #6a351d;box-shadow:0 0 0 5px #28130c,inset 0 0 35px #0008}
 .bottomBar{position:absolute;z-index:20;left:0;right:0;bottom:0;height:72px;background:#0c0b0aec;border-top:2px solid #9c261f;display:grid;grid-template-columns:1fr 1fr 1.5fr 1.2fr;gap:15px;padding:12px 24px}
 .bottomBar button{border:1px solid #bd7736;border-radius:8px;background:linear-gradient(#3d2117,#17110d);color:#fff;font-size:15px}.bottomBar button:nth-child(2),.bottomBar button:nth-child(3){background:linear-gradient(#81301f,#35130e)}
 .hidden{display:none!important}
+
+/* V10 — suppression du deuxième jeu de cartes lorsque le mort est affiché */
+.v10-hide-lower-hand { display:none !important; }
+
+/* V11 — retours visuels cohérents pour tous les boutons */
+button:active{transform:translateY(1px);filter:brightness(.92)}
+button:disabled{opacity:.38;filter:grayscale(.4);cursor:not-allowed}

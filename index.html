@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#160d08">
 <title>Bridge Maman</title>
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="stylesheet" href="styles.css?v=90">
+<link rel="stylesheet" href="styles.css?v=110">
 </head>
 <body>
 <div id="viewport">
@@ -110,7 +110,7 @@
 </main>
 </div>
 
-<script src="app.js?v=90"></script>
+<script src="app.js?v=110"></script>
 <script>
 (() => {
   const DISPLAY=['♥','♠','♦','♣','SA'];
@@ -134,7 +134,10 @@
     const playing=!byId('playControls').classList.contains('hidden');
     (playing?byId('hintCardBtn'):byId('hintBidBtn')).click();
   };
-  byId('backBtn').onclick=()=>history.back();
+  byId('backBtn').onclick=()=>{
+    if(history.length>1) history.back();
+    else byId('newDealBtn').click();
+  };
 
   function fitGame(){
     const g=byId('game'), v=byId('viewport');
@@ -146,6 +149,27 @@
   addEventListener('resize',fitGame);
   addEventListener('orientationchange',()=>setTimeout(fitGame,120));
   fitGame();
+
+  // V10 — une seule main visible quand Sud joue depuis le mort.
+  // La main interactive du mort reste affichée en haut.
+  const southWrap = document.getElementById('southWrap');
+  const dummyWrap = document.getElementById('dummyWrap');
+  function syncSingleHand(){
+    if(!southWrap || !dummyWrap) return;
+    const dummyVisible = !dummyWrap.classList.contains('hidden');
+    const statusText = (document.getElementById('status')?.textContent || '').toLowerCase();
+    const playingFromDummy = dummyVisible && (
+      statusText.includes('depuis le mort') ||
+      statusText.includes('mort') ||
+      document.body.classList.contains('dummy-turn')
+    );
+    southWrap.classList.toggle('v10-hide-lower-hand', playingFromDummy);
+  }
+  new MutationObserver(syncSingleHand).observe(document.body,{
+    subtree:true, childList:true, characterData:true, attributes:true,
+    attributeFilter:['class']
+  });
+  syncSingleHand();
 })();
 </script>
 </body>

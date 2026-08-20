@@ -1,14 +1,21 @@
-BRIDGE MAMAN V9
-================
-Reconstruction de l'interface pour corriger les problèmes de la V8.
+BRIDGE MAMAN V11
+=================
+Version de fiabilisation des fonctions visibles à l'écran.
 
-- plus d'image de fond contenant de faux boutons/cartes ;
-- toute l'interface visible est maintenant réellement interactive ;
-- affichage entier automatiquement réduit à la taille du téléphone ;
-- enchères visibles dans l'ordre ♥ Cœur, ♠ Pique, ♦ Carreau, ♣ Trèfle, SA ;
-- cartes de Sud classées ♥ ♠ ♦ ♣ ;
-- carte qui monte sous le doigt ;
-- rejouer exactement la dernière donne ;
-- Sud choisit sa carte lorsqu'il est le mort ;
-- contrat, score et historique dynamiques ;
-- cache V9.
+Fonctions vérifiées/corrigées :
+- enchères 1 à 7 : ♥ ♠ ♦ ♣ SA ;
+- Passe ;
+- Contre X avec message si impossible ;
+- Surcontre XX avec message si impossible ;
+- Conseil enchères ;
+- jeu tactile des cartes ;
+- carte qui se soulève sous le doigt ;
+- jeu depuis le mort ;
+- une seule main visible lorsque le mort est joué ;
+- Conseil carte ;
+- Analyse ;
+- Finir automatiquement (séquence fiabilisée) ;
+- Rejouer exactement la dernière donne ;
+- Nouvelle donne ;
+- Revenir ;
+- contrat, entame, score et historique mis à jour.
