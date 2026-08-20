@@ -8,8 +8,11 @@ const P=['W','N','E','S'];
 const NAME={W:'Ouest',N:'Nord',E:'Est',S:'Sud'};
 let hands={}, dealer='S', turn='S', auction=[], selectedLevel=1, selectedStrain='♣', dealNo=0;
 let phase='auction', contract=null, declarer=null, dummy=null, leader=null, current=null, trick=[], leadSuit=null, tricksNS=0, tricksEW=0, dummyShown=false;
+let lastDealSnapshot=null, runToken=0;
 
 const $=id=>document.getElementById(id);
+const cloneHands=src=>Object.fromEntries(P.map(p=>[p,(src[p]||[]).map(c=>({...c}))]));
+function later(fn,ms){const token=runToken;setTimeout(()=>{if(token===runToken)fn()},ms)}
 function deck(){
   let d=[]; for(const s of CARD_SUITS)for(const r of RANKS)d.push({s,r});
   for(let i=d.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[d[i],d[j]]=[d[j],d[i]]}
@@ -74,26 +77,73 @@ function seatActive(p){
   ['W','N','E','S'].forEach(x=>$('seat'+x).classList.toggle('active',x===p));
 }
 
+function enableFingerSelection(el,player){
+  let active=false, chosen=null, pointerId=null;
+  const clear=()=>{
+    el.querySelectorAll('.card.preview').forEach(c=>c.classList.remove('preview'));
+    chosen=null;
+  };
+  const chooseAt=(x,y)=>{
+    const hit=document.elementFromPoint(x,y)?.closest('.card');
+    const card=hit && hit.parentElement===el && hit.classList.contains('playable') ? hit : null;
+    if(card===chosen)return;
+    clear();
+    if(card){chosen=card;card.classList.add('preview')}
+  };
+  el.onpointerdown=e=>{
+    const card=e.target.closest('.card.playable');
+    if(!card)return;
+    active=true; pointerId=e.pointerId;
+    try{el.setPointerCapture(pointerId)}catch(_e){}
+    chooseAt(e.clientX,e.clientY);
+    e.preventDefault();
+  };
+  el.onpointermove=e=>{
+    if(!active||e.pointerId!==pointerId)return;
+    chooseAt(e.clientX,e.clientY);
+    e.preventDefault();
+  };
+  const finish=e=>{
+    if(!active||e.pointerId!==pointerId)return;
+    chooseAt(e.clientX,e.clientY);
+    const card=chosen;
+    const index=card?Number(card.dataset.index):-1;
+    clear(); active=false;
+    try{el.releasePointerCapture(pointerId)}catch(_e){}
+    pointerId=null;
+    if(index>=0) humanCard(player,index);
+    e.preventDefault();
+  };
+  el.onpointerup=finish;
+  el.onpointercancel=()=>{clear();active=false;pointerId=null};
+}
+
 function renderHand(player,elId,clickable){
   const el=$(elId); el.innerHTML='';
+  el.classList.toggle('playable-hand',clickable);
   const legal=phase==='play' ? legalCards(player) : hands[player].map((_,i)=>i);
   hands[player].forEach((c,i)=>{
-    const d=document.createElement('div'); d.className='card '+(isRed(c)?'red ':'')+((phase==='play'&&clickable&&!legal.includes(i))?'illegal':'');
+    const isLegal=legal.includes(i);
+    const d=document.createElement('div');
+    d.className='card '+(isRed(c)?'red ':'')+((phase==='play'&&clickable&&!isLegal)?'illegal ':'')+(clickable&&isLegal?'playable':'');
+    d.dataset.index=String(i); d.dataset.player=player;
     d.innerHTML=`${c.r}<br>${c.s}`;
     const n=hands[player].length;
     const mid=(n-1)/2;
     const off=i-mid;
     const angle=off*(n>=11?2.15:n>=8?2.5:3.0);
     const drop=Math.pow(Math.abs(off),1.34)*0.62;
-    d.style.transform=`translateY(${drop}px) rotate(${angle}deg)`;
+    d.style.setProperty('--card-drop',`${drop}px`);
+    d.style.setProperty('--card-angle',`${angle}deg`);
     d.style.zIndex=String(i+1);
-    if(clickable)d.onclick=()=>humanCard(player,i);
     el.appendChild(d);
   });
+  if(clickable)enableFingerSelection(el,player);
+  else {el.onpointerdown=el.onpointermove=el.onpointerup=el.onpointercancel=null}
 }
 function renderHands(){
   const southIsDummy = dummyShown && dummy==='S';
-  const southClickable = phase==='play' && current==='S' && !southIsDummy;
+  const southClickable = phase==='play' && current==='S';
   renderHand('S','handS', southClickable);
   $('southHcp').textContent=`(${hcp(hands.S)} H)`;
   $('southLabel').innerHTML=(southIsDummy?'Mort — Sud ':'Votre main — Sud ')+`<span id="southHcp">(${hcp(hands.S)} H)</span>`;
@@ -116,9 +166,9 @@ function renderTrick(){
 
 function addBid(obj){
   obj.player=turn; auction.push(obj); renderAuction(); turn=next(turn); seatActive(turn);
-  if(passedOut()){ $('status').textContent='Passe général. Nouvelle donne.'; setTimeout(newDeal,800); return; }
+  if(passedOut()){ $('status').textContent='Passe général. Nouvelle donne.'; later(newDeal,800); return; }
   if(auctionEnded()){ finishAuction(); return; }
-  if(turn!=='S') setTimeout(botAuction,420);
+  if(turn!=='S') later(botAuction,420);
   else $('status').textContent='À vous, Sud.';
 }
 function humanBid(type){
@@ -182,7 +232,7 @@ function finishAuction(){
   $('contractLine').textContent=`Contrat : ${contract.level}${contract.strain}${contract.redoubled?'XX':contract.doubled?'X':''} par ${NAME[declarer]}`;
   $('bidControls').classList.add('hidden'); $('playControls').classList.remove('hidden'); $('playPanel').classList.remove('hidden');
   seatActive(current); $('status').textContent=`Entame : ${NAME[leader]}.`;
-  if(current!=='S') setTimeout(botCard,500);
+  if(current!=='S') later(botCard,500);
 }
 function legalCards(p){
   const h=hands[p].map((c,i)=>({c,i}));
@@ -235,7 +285,7 @@ function playCard(p,i){
   if(trick.length===4){
     const w=winner(); if(side(w)==='NS')tricksNS++;else tricksEW++;
     $('status').textContent=`Pli pour ${NAME[w]}.`;
-    setTimeout(()=>{
+    later(()=>{
       trick=[];leadSuit=null;current=w;renderTrick();
       if(hands.S.length===0){endPlay();return}
       seatActive(current); advancePlay();
@@ -246,7 +296,7 @@ function playCard(p,i){
 }
 function humanCard(p,i){
   if(phase!=='play'||current!==p)return;
-  const canHumanPlay = (p==='S' && dummy!=='S') || (declarer==='S' && p===dummy);
+  const canHumanPlay = (p==='S') || (declarer==='S' && p===dummy);
   if(!canHumanPlay)return;
   if(!legalCards(p).includes(i)){ $('status').textContent='Vous devez fournir à la couleur.'; return; }
   playCard(p,i);
@@ -257,12 +307,12 @@ function botCard(){
 }
 function advancePlay(){
   renderHands();
-  const humanControls = (current==='S' && dummy!=='S') || (declarer==='S' && current===dummy);
+  const humanControls = (current==='S') || (declarer==='S' && current===dummy);
   if(humanControls){
-    $('status').textContent=current==='S'?'À vous, Sud.':`À vous de jouer depuis le mort (${NAME[dummy]}).`;
+    $('status').textContent=current==='S'?(dummy==='S'?'Sud est le mort : choisissez vous-même la carte à jouer.':'À vous, Sud.'):`À vous de jouer depuis le mort (${NAME[dummy]}).`;
   }else{
     $('status').textContent=(dummy==='S' && current==='S')?'Sud est le mort : Nord joue cette carte.':`${NAME[current]} joue…`;
-    setTimeout(botCard,420);
+    later(botCard,420);
   }
 }
 function endPlay(){
@@ -292,28 +342,44 @@ function autoFinish(){
   function loop(){
     if(phase!=='play')return;
     const i=cheapWinningIndex(current); playCard(current,i);
-    if(hands.S.length) setTimeout(loop,80);
+    if(hands.S.length) later(loop,80);
   }
   loop();
 }
-function newDeal(){
-  dealNo++; const d=deck();
-  hands.W=sortHand(d.slice(0,13));hands.N=sortHand(d.slice(13,26));hands.E=sortHand(d.slice(26,39));hands.S=sortHand(d.slice(39,52));
-  dealer=P[(dealNo-1)%4];turn=dealer;auction=[];phase='auction';contract=null;declarer=dummy=leader=current=null;trick=[];leadSuit=null;tricksNS=tricksEW=0;dummyShown=false;
-  $('dealInfo').textContent=`Donne ${dealNo} • Donneur ${NAME[dealer]}`;
+function startDeal(initialHands, initialDealer, infoText){
+  runToken++;
+  hands=cloneHands(initialHands);
+  dealer=initialDealer;turn=dealer;auction=[];phase='auction';contract=null;declarer=dummy=leader=current=null;trick=[];leadSuit=null;tricksNS=tricksEW=0;dummyShown=false;
+  $('dealInfo').textContent=infoText;
   $('contractLine').textContent='Enchères en cours.';
   $('bidControls').classList.remove('hidden');$('playControls').classList.add('hidden');$('playPanel').classList.add('hidden');
   renderAuction();renderHands();renderTrick();seatActive(turn);
   $('status').textContent=`${NAME[dealer]} donne. ${hcp(hands.S)} H pour Sud.`;
-  if(turn!=='S')setTimeout(botAuction,500); else $('status').textContent=`À vous d’ouvrir. ${hcp(hands.S)} H.`;
+  if(turn!=='S')later(botAuction,500); else $('status').textContent=`À vous d’ouvrir. ${hcp(hands.S)} H.`;
 }
+function newDeal(){
+  dealNo++; const d=deck();
+  const fresh={
+    W:sortHand(d.slice(0,13)),N:sortHand(d.slice(13,26)),E:sortHand(d.slice(26,39)),S:sortHand(d.slice(39,52))
+  };
+  const freshDealer=P[(dealNo-1)%4];
+  lastDealSnapshot={dealNo, dealer:freshDealer, hands:cloneHands(fresh)};
+  startDeal(fresh,freshDealer,`Donne ${dealNo} • Donneur ${NAME[freshDealer]}`);
+}
+function replayLastDeal(){
+  if(!lastDealSnapshot){$('status').textContent='Aucune donne à rejouer.';return}
+  const snap=lastDealSnapshot;
+  startDeal(snap.hands,snap.dealer,`Donne ${snap.dealNo} • Rejouée • Donneur ${NAME[snap.dealer]}`);
+  $('status').textContent=`Même donne : à vous de rejouer. ${hcp(hands.S)} H pour Sud.`;
+}
+
 
 function setupControls(){
   const bl=$('bidLevels'); for(let i=1;i<=7;i++){const b=document.createElement('button');b.textContent=i;b.onclick=()=>{selectedLevel=i;[...bl.children].forEach(x=>x.classList.remove('selected'));b.classList.add('selected')};if(i===1)b.classList.add('selected');bl.appendChild(b)}
   const sr=$('strainRow'); SUITS.forEach(s=>{const b=document.createElement('button');b.textContent=s;b.onclick=()=>{selectedStrain=s;[...sr.children].forEach(x=>x.classList.remove('selected'));b.classList.add('selected');makeHumanBid()};if(s==='♣')b.classList.add('selected');sr.appendChild(b)})
   $('passBtn').onclick=()=>humanBid('pass');$('doubleBtn').onclick=()=>humanBid('double');$('redoubleBtn').onclick=()=>humanBid('redouble');
   $('hintBidBtn').onclick=hintBid;$('hintCardBtn').onclick=hintCard;$('analysisBtn').onclick=analysis;$('claimBtn').onclick=autoFinish;
-  $('newDealBtn').onclick=newDeal;$('installBtn').onclick=()=>alert('Dans Safari : Partager → Ajouter à l’écran d’accueil.');
+  $('replayDealBtn').onclick=replayLastDeal;$('newDealBtn').onclick=newDeal;$('installBtn').onclick=()=>alert('Dans Safari : Partager → Ajouter à l’écran d’accueil.');
 }
 setupControls();newDeal();
 if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))}

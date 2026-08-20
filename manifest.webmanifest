@@ -1,9 +1,9 @@
 {
-  "name": "Bridge Expert SEF",
-  "short_name": "Bridge SEF",
+  "name": "Bridge Maman",
+  "short_name": "Bridge Maman",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#083f21",
-  "theme_color": "#0d5c2f",
+  "background_color": "#2d160f",
+  "theme_color": "#5a2e1d",
   "icons": []
 }

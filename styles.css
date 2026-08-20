@@ -8,6 +8,7 @@ html,body{margin:0;background:radial-gradient(circle at 50% 30%,#14703b,var(--fe
 button{font:inherit}
 .app{max-width:560px;margin:auto;padding:calc(env(safe-area-inset-top) + 8px) 10px calc(env(safe-area-inset-bottom) + 18px)}
 .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.topActions{display:flex;align-items:center;gap:6px}
 .brand{font-size:22px;font-weight:800;color:var(--gold)}
 .sub{font-size:13px;opacity:.85}
 .iconBtn{width:44px;height:44px;border-radius:12px;border:1px solid #88a58e;background:#10261a;color:white;font-size:24px}
@@ -126,3 +127,34 @@ footer{display:none!important}
     margin-left:-14px;
   }
 }
+
+/* === V3.4 — BRIDGE MAMAN / TABLE CLASSIQUE === */
+:root{--wood:#5a2e1d;--wood2:#2d160f;--felt:#17683b;--felt2:#0d4828;--gold:#f4c542}
+html,body{background:radial-gradient(circle at 50% 35%,#875038 0,#4a281c 55%,#25130d 100%)}
+.app{max-width:760px;background:linear-gradient(90deg,#3a1e14,#6d3d29 10%,#6d3d29 90%,#3a1e14);padding-left:12px;padding-right:12px}
+.topbar{background:#efe7d6;color:#28160f;border-radius:9px;padding:5px 9px;border:2px solid #c9b58d;box-shadow:0 2px 8px #0008}
+.brand{color:#7b1d1d;text-shadow:0 1px #fff;font-family:Georgia,serif}.sub{color:#553d31;opacity:1}
+.table{background:radial-gradient(circle,#23804b,#0e4f2d 72%);border:9px solid #6b3a24;border-radius:22px;box-shadow:inset 0 0 0 3px #2e160e,0 4px 12px #0009;padding:5px}
+.seat{background:#ead8b7;color:#2c170e;border:2px solid #5e311e;box-shadow:0 2px 4px #0007}.seat span{color:#734a38}.seat.active{outline:3px solid var(--gold)}
+.auction{box-shadow:0 2px 7px #0008}.auction th{background:#e4d5b7;color:#351c12}.contractLine,.scoreline,.status,.controls,.handWrap{background:#3d2117;border-color:#a87a53}
+.trickPos{border:2px solid #d5c29d;box-shadow:0 2px 5px #0007}
+.card{background:#fffef7;border-color:#d4c7ad;box-shadow:0 3px 5px #0009}
+.controls button{background:#f4ead3;border:1px solid #9a795b}.controls button.pass{background:#2f5b3b;color:#fff}.controls button.hint{background:#f0cc57;color:#351c12}
+.handLabel,.panelTitle{color:#f6e6c9}
+@media(min-width:600px){.app{padding-left:18px;padding-right:18px}.table{grid-template-columns:72px 1fr 72px}.card{flex-basis:48px;width:48px;max-width:48px;height:68px;font-size:17px}}
+
+
+/* === V3.6 — SÉLECTION AU DOIGT === */
+.card{
+  transform:translateY(var(--card-drop,0px)) rotate(var(--card-angle,0deg));
+  transition:transform .10s ease, filter .10s ease, box-shadow .10s ease;
+}
+.hand.playable-hand{touch-action:none;user-select:none;-webkit-user-select:none}
+.card.playable{cursor:pointer}
+.card.preview{
+  transform:translateY(calc(var(--card-drop,0px) - 22px)) rotate(var(--card-angle,0deg)) scale(1.06);
+  z-index:1000!important;
+  filter:brightness(1.06);
+  box-shadow:0 9px 12px #0008;
+}
+.card.illegal{pointer-events:none}
