@@ -1,0 +1,9 @@
+{
+  "name": "Bridge Maman",
+  "short_name": "Bridge Maman",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#2d160f",
+  "theme_color": "#5a2e1d",
+  "icons": []
+}
