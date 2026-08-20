@@ -1,4 +1,4 @@
-const CACHE='bridge-maman-v60';
+const CACHE='bridge-maman-v70';
 const ASSETS=['./','index.html','styles.css?v=60','app.js?v=60','manifest.webmanifest','bridge-reference.jpg'];
 self.addEventListener('install',e=>{self.skipWaiting();});
 self.addEventListener('activate',e=>e.waitUntil(
